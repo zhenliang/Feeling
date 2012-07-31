@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="com.feeling.ds.VertexData"/>
+    <classEntry path="com.feeling.ds.Color"/>
+    <classEntry path="com.feeling.core.Feeling"/>
+    <classEntry path="com.feeling.display.DisplayObject"/>
+    <classEntry path="com.feeling.display.DisplayObjectContainer"/>
+    <classEntry path="com.feeling.display.Quad"/>
+    <classEntry path="com.feeling.core.RenderSupport"/>
+    <classEntry path="com.feeling.display.Stage"/>
+    <classEntry path="com.adobe.utils.AGALMiniAssembler"/>
+    <classEntry path="com.feeling.display.Camera"/>
+    <classEntry path="com.feeling.events.Event"/>
+    <classEntry path="com.feeling.events.EventDispatcher"/>
+    <classEntry path="com.feeling.events.EnterFrameEvent"/>
+    <classEntry path="com.feeling.events.KeyboardEvent"/>
+    <classEntry path="com.feeling.input.KeyboardInput"/>
+    <classEntry path="com.feeling.textures.Texture"/>
+    <classEntry path="com.feeling.utils.getNextPowerOfTwo"/>
+    <classEntry path="com.feeling.textures.ConcreteTexture"/>
+    <classEntry path="com.feeling.textures.SubTexture"/>
+    <classEntry path="com.feeling.display.Image"/>
+    <classEntry path="com.feeling.textures.TextureCreator"/>
+    <classEntry path="com.feeling.core.ShaderManager"/>
+    <classEntry path="com.feeling.shaders.QuadShader"/>
+    <classEntry path="com.feeling.shaders.ImageShader"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
