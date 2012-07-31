@@ -1,7 +1,7 @@
 package
 {
-	import com.feeling.textures.Texture;
-	import com.feeling.textures.TextureCreator;
+	import feeling.textures.Texture;
+	import feeling.textures.TextureCreator;
 	
 	import flash.display.Bitmap;
 	import flash.utils.Dictionary;

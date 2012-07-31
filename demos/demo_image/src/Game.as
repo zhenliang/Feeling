@@ -1,10 +1,10 @@
 package
 {
-    import com.feeling.core.Feeling;
-    import com.feeling.core.RenderSupport;
-    import com.feeling.display.DisplayObjectContainer;
-    import com.feeling.textures.Texture;
-    import com.feeling_ex.DebugCamera;
+    import feeling.core.Feeling;
+    import feeling.core.RenderSupport;
+    import feeling.display.DisplayObjectContainer;
+    import feeling.textures.Texture;
+    import feeling_ex.DebugCamera;
 
     public class Game extends DisplayObjectContainer
     {

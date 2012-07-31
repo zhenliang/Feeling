@@ -1,9 +1,9 @@
 package
 {
-	import com.feeling.display.Image;
-	import com.feeling.events.EnterFrameEvent;
-	import com.feeling.events.Event;
-	import com.feeling.textures.Texture;
+	import feeling.display.Image;
+	import feeling.events.EnterFrameEvent;
+	import feeling.events.Event;
+	import feeling.textures.Texture;
 	
 	public class MyImage extends Image
 	{

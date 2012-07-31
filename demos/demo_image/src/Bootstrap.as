@@ -1,6 +1,6 @@
 package
 {
-	import com.feeling.core.Feeling;
+	import feeling.core.Feeling;
 	
 	import flash.display.Sprite;
 	

@@ -1,8 +1,8 @@
 package
 {
-    import com.feeling.display.Quad;
-    import com.feeling.events.EnterFrameEvent;
-    import com.feeling.events.Event;
+    import feeling.display.Quad;
+    import feeling.events.EnterFrameEvent;
+    import feeling.events.Event;
 
     public class MyQuad extends Quad
     {
