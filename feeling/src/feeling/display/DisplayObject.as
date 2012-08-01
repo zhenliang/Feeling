@@ -2,6 +2,8 @@ package feeling.display
 {
     import feeling.events.Event;
     import feeling.events.EventDispatcher;
+    
+    import flash.geom.Matrix;
 
     public class DisplayObject extends EventDispatcher
     {
@@ -69,6 +71,30 @@ package feeling.display
             _rotationZ = value;
         }
 
+		public function get transformationMatrix():Matrix
+		{
+			var matrix:Matrix = new Matrix();
+			
+			if ((_pivotX != 0.0) || (_pivotY != 0.0))
+				matrix.translate(-_pivotX, -_pivotY);
+			if ((_scaleX != 1.0) || (_scaleY != 1.0))
+				matrix.scale(_scaleX, _scaleY);
+			if (_rotationZ != 0.0)
+				matrix.rotate(_rotationZ);
+			if ((_x != 0.0) || (_y != 0.0))
+				matrix.translate(_x, _y);
+			
+			return matrix;
+		}
+		
+		public function get root():DisplayObject
+		{
+			var currentObject:DisplayObject = this;
+			while (currentObject.parent)
+				currentObject = currentObject.parent;
+			return currentObject;
+		}
+
 		public function get scaleX():Number  { return _scaleX; }
 		public function set scaleX( value:Number ):void  { _scaleX = value; }
 		public function get scaleY():Number  { return _scaleY; }
@@ -123,6 +149,83 @@ package feeling.display
             if ( dispose )
                 this.dispose();
         }
+		
+		public function getTransformationMatrixToSpace(targetSpace:DisplayObject):Matrix
+		{
+			var rootMatrix:Matrix;
+			var targetMatrix:Matrix;
+			
+			if (targetSpace == this)
+				return new Matrix();
+			else if (targetSpace == null)
+			{
+				// tragetCoordinateSpace 'null' respresents the target space of the root object.
+				// -> move up from this to root
+				rootMatrix = new Matrix();
+				currentObject = this;
+				while (currentObject)
+				{
+					rootMatrix.concat(currentObject.transformationMatrix);
+					currentObject = currentObject.parent;
+				}
+				return rootMatrix;
+			}
+			else if (targetSpace._parent == this) // optimization
+			{
+				targetMatrix = targetSpace.transformationMatrix;
+				targetMatrix.invert();
+				return targetMatrix;
+			}
+			else if (targetSpace == _parent)
+				return transformationMatrix;
+			
+			// 1. find a common parent of this and the target space
+			
+			var ancestors:Vector.<DisplayObject> = new <DisplayObject>[];
+			var commonParent:DisplayObject = null;
+			var currentObject:DisplayObject = this;
+			while (currentObject)
+			{
+				ancestors.push(currentObject);
+				currentObject = currentObject.parent;
+			}
+			
+			currentObject = targetSpace;
+			while (currentObject && (ancestors.indexOf(currentObject) == -1))
+				currentObject = currentObject.parent;
+			
+			if (currentObject == null)
+				throw new Error("[DisplayObject] 目标对象与本对象没有共同父节点");
+			else
+				commonParent = currentObject;
+			
+			// 2. move up from this to common parent
+			
+			rootMatrix = new Matrix();
+			currentObject = this;
+			while (currentObject != commonParent)
+			{
+				rootMatrix.concat(currentObject.transformationMatrix);
+				currentObject = currentObject.parent;
+			}
+			
+			// 3. now move up from target until we reach the common parent
+			
+			targetMatrix = new Matrix();
+			currentObject = targetSpace;
+			while (currentObject != commonParent)
+			{
+				targetMatrix.concat(currentObject.transformationMatrix);
+				currentObject = currentObject.parent;
+			}
+			
+			// 4. now combine the two matrices
+			
+			targetMatrix.invert();
+			rootMatrix.concat(targetMatrix);
+			
+			return rootMatrix;
+		}
 
         public function render():void
         {
