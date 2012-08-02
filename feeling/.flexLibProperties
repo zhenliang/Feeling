@@ -18,6 +18,8 @@
     <classEntry path="com.feeling.core.ShaderManager"/>
     <classEntry path="com.feeling.shaders.QuadShader"/>
     <classEntry path="feeling.events.Touch"/>
+    <classEntry path="feeling.display.Sprite"/>
+    <classEntry path="feeling.events.TouchMarker"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

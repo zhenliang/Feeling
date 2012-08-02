@@ -27,6 +27,8 @@ package feeling.display
 		
         private var _alpha:Number;
         private var _visible:Boolean;
+		
+		private var _touchable:Boolean;
 
 		private var _name:String;
 		private var _parent:DisplayObjectContainer;
@@ -117,6 +119,9 @@ package feeling.display
 
         public function get visible():Boolean  { return _visible; }
         public function set visible( value:Boolean ):void  { _visible = value; }
+		
+		public function get touchable():Boolean { return _touchable; }
+		public function set touchable(value:Boolean):void { _touchable = value; }
 
         public function get name():String  { return _name; }
         public function set name( value:String ):void  { _name = value; }
@@ -133,6 +138,7 @@ package feeling.display
 			_pivotX = _pivotY = _pivotZ = 0.0;
             _alpha = 1.0;
             _visible = true;
+			_touchable = true;
         }
 
         public function dispose():void
