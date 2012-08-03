@@ -4,6 +4,8 @@ package feeling.display
     import feeling.events.EventDispatcher;
     
     import flash.geom.Matrix;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
 
     public class DisplayObject extends EventDispatcher
     {
@@ -127,7 +129,8 @@ package feeling.display
         public function set name( value:String ):void  { _name = value; }
 
         public function get parent():DisplayObjectContainer  { return _parent; }
-
+		public function get stage():Stage { return root as Stage; }
+		
         // construction
 
         public function DisplayObject()
@@ -233,6 +236,25 @@ package feeling.display
 			return rootMatrix;
 		}
 
+		public function getBounds(targetSpace:DisplayObject):Rectangle
+		{
+			throw new Error("Method needs to bu implemented in subclass");
+			return null;
+		}
+		
+		public function hitTestPoint(localPoint:Point, forTouch:Boolean = false):DisplayObject
+		{
+			// on a touch test, invisible or untouchable objects cause the test to fail
+			if (forTouch && (!_visible || !_touchable))
+				return null;
+			
+			// otherwise, check bounding box
+			if (getBounds(this).containsPoint(localPoint))
+				return this;
+			
+			return null;
+		}
+		
         public function render():void
         {
             // override in subclass

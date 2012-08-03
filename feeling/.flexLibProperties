@@ -20,6 +20,8 @@
     <classEntry path="feeling.events.Touch"/>
     <classEntry path="feeling.display.Sprite"/>
     <classEntry path="feeling.events.TouchMarker"/>
+    <classEntry path="feeling.events.TouchEvent"/>
+    <classEntry path="feeling.events.TouchProcessor"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
