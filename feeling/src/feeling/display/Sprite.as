@@ -1,10 +1,11 @@
 package feeling.display
 {
-	public class Sprite extends DisplayObjectContainer
-	{
-		public function Sprite()
-		{
-			super();
-		}
-	}
+
+    public class Sprite extends DisplayObjectContainer
+    {
+        public function Sprite()
+        {
+            super();
+        }
+    }
 }

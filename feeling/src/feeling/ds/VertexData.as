@@ -1,7 +1,7 @@
 package feeling.ds
 {
     import feeling.core.Feeling;
-    
+
     import flash.display3D.Context3D;
     import flash.display3D.VertexBuffer3D;
     import flash.geom.Point;
@@ -16,78 +16,78 @@ package feeling.ds
 
         private var _data:Vector.<Number>;
 
-        public function VertexData( numVertices:int )
+        public function VertexData(numVertices:int)
         {
-            _data = new Vector.<Number>( numVertices * ELEMENTS_PER_VERTEX, true );
+            _data = new Vector.<Number>(numVertices * ELEMENTS_PER_VERTEX, true);
         }
 
         // functions
-		
-		public function clone():VertexData
-		{
-			var clone:VertexData = new VertexData(0);
-			clone._data = _data.concat();
-			clone._data.fixed = true;
-			return clone;
-		}
 
-        public function setPosition( vertexId:int, x:Number, y:Number, z:Number = 0.0 ):void
+        public function clone():VertexData
         {
-            setValues( getOffset( vertexId ), x, y, z );
+            var clone:VertexData = new VertexData(0);
+            clone._data = _data.concat();
+            clone._data.fixed = true;
+            return clone;
         }
 
-        public function getPostion( vertexId:int ):Vector3D
+        public function setPosition(vertexId:int, x:Number, y:Number, z:Number = 0.0):void
         {
-            var offset:int = getOffset( vertexId ) + POSITION_OFFSET;
-            return new Vector3D( _data[ offset ], _data[ offset + 1 ], _data[ offset + 2 ] );
+            setValues(getOffset(vertexId), x, y, z);
         }
 
-        public function setColor( vertexId:int, color:uint ):void
+        public function getPostion(vertexId:int):Vector3D
         {
-            setValues( getOffset( vertexId ) + COLOR_OFFSET, Color.getRed( color ) / 255, Color.getGreen( color ) / 255,
-                Color.getBlue( color ) / 255 );
+            var offset:int = getOffset(vertexId) + POSITION_OFFSET;
+            return new Vector3D(_data[offset], _data[offset + 1], _data[offset + 2]);
         }
 
-        public function setUniformColor( color:uint ):void
+        public function setColor(vertexId:int, color:uint):void
         {
-            for ( var i:int = 0; i < numVertices; ++i )
-                setColor( i, color );
+            setValues(getOffset(vertexId) + COLOR_OFFSET, Color.getRed(color) / 255, Color.getGreen(color) / 255, Color.
+                getBlue(color) / 255);
         }
 
-        public function getColor( vertexId:int ):uint
+        public function setUniformColor(color:uint):void
         {
-            var offset:int = getOffset( vertexId ) + COLOR_OFFSET;
-            return Color.create( _data[ offset ] * 255, _data[ offset + 1 ] * 255, _data[ offset + 2 ] * 255 );
+            for (var i:int = 0; i < numVertices; ++i)
+                setColor(i, color);
         }
 
-        public function setTexCoords( vertexId:int, u:Number, v:Number ):void
+        public function getColor(vertexId:int):uint
         {
-            setValues( getOffset( vertexId ) + TEXCOORD_OFFSET, u, v );
+            var offset:int = getOffset(vertexId) + COLOR_OFFSET;
+            return Color.create(_data[offset] * 255, _data[offset + 1] * 255, _data[offset + 2] * 255);
         }
 
-        public function getTexCoords( vertexId:int ):Point
+        public function setTexCoords(vertexId:int, u:Number, v:Number):void
         {
-            var offset:int = getOffset( vertexId ) + TEXCOORD_OFFSET;
-            return new Point( _data[ offset ], _data[ offset + 1 ] );
+            setValues(getOffset(vertexId) + TEXCOORD_OFFSET, u, v);
+        }
+
+        public function getTexCoords(vertexId:int):Point
+        {
+            var offset:int = getOffset(vertexId) + TEXCOORD_OFFSET;
+            return new Point(_data[offset], _data[offset + 1]);
         }
 
         public function toVertexBuffer():VertexBuffer3D
         {
             var context:Context3D = Feeling.instance.context3d;
-            var buffer:VertexBuffer3D = context.createVertexBuffer( numVertices, ELEMENTS_PER_VERTEX );
-            buffer.uploadFromVector( _data, 0, numVertices );
+            var buffer:VertexBuffer3D = context.createVertexBuffer(numVertices, ELEMENTS_PER_VERTEX);
+            buffer.uploadFromVector(_data, 0, numVertices);
             return buffer;
         }
 
         // helpers
 
-        private function setValues( offset:int, ... values ):void
+        private function setValues(offset:int, ... values):void
         {
-            for ( var i:int = 0; i < values.length; ++i )
-                _data[ offset + i ] = values[ i ];
+            for (var i:int = 0; i < values.length; ++i)
+                _data[offset + i] = values[i];
         }
 
-        private function getOffset( vertexId:int ):int
+        private function getOffset(vertexId:int):int
         {
             return vertexId * ELEMENTS_PER_VERTEX;
         }
