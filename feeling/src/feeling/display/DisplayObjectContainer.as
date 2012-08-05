@@ -3,6 +3,10 @@ package feeling.display
     import feeling.core.Feeling;
     import feeling.core.RenderSupport;
     import feeling.events.Event;
+    
+    import flash.geom.Matrix;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
 
     public class DisplayObjectContainer extends DisplayObject
     {
@@ -141,6 +145,50 @@ package feeling.display
 
         // other methods
 
+		public override function getBounds(targetSpace:DisplayObject):Rectangle
+		{
+			var numChildren:int = _children.length;
+			
+			if (numChildren == 0)
+				return new Rectangle();
+			else if (numChildren == 1)
+				return _children[0].getBounds(targetSpace);
+			else
+			{
+				var minX:Number = Number.MAX_VALUE, maxX:Number = -Number.MAX_VALUE;
+				var minY:Number = Number.MAX_VALUE, maxY:Number = -Number.MAX_VALUE;
+				for each (var child:DisplayObject in _children)
+				{
+					var childBounds:Rectangle = child.getBounds(targetSpace);
+					minX = Math.min(minX, childBounds.x);
+					minY = Math.min(minY, childBounds.y);
+					maxX = Math.max(maxX, childBounds.x + childBounds.width);
+					maxY = Math.max(maxY, childBounds.y + childBounds.height);
+				}
+				return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+			}
+			
+			return new Rectangle();
+		}
+
+		public override function hitTestPoint(localPoint:Point, forTouch:Boolean = false):DisplayObject
+		{
+			if (forTouch && (!visible || !touchable))
+				return null;
+			
+			for (var i:int = _children.length - 1; i >= 0; --i)
+			{
+				var child:DisplayObject = _children[i];
+				var transformationMatrix:Matrix = getTransformationMatrixToSpace(child);
+				var transformedPoint:Point = transformationMatrix.transformPoint(localPoint);
+				var target:DisplayObject = child.hitTestPoint(transformedPoint, forTouch);
+				if (target)
+					return target;
+			}
+			
+			return null;
+		}
+		
         public override function render():void
         {
 			var renderSupport:RenderSupport = Feeling.instance.renderSupport;

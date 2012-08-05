@@ -2,6 +2,8 @@ package feeling.display
 {
 	import feeling.events.EnterFrameEvent;
 	import feeling.events.Event;
+	
+	import flash.geom.Point;
 
     public class Stage extends DisplayObjectContainer
     {
@@ -14,8 +16,8 @@ package feeling.display
             _height = height;
         }
 		
-		public function set width(val:Number):void { throw new Error(); }
-		public function set height(val:Number):void { throw new Error(); }
+		public override function set width(val:Number):void { throw new Error(); }
+		public override function set height(val:Number):void { throw new Error(); }
 		
 		public function get stageWidth():Number { return _width; }
 		public function get stageHeight():Number { return _height; }
@@ -31,6 +33,16 @@ package feeling.display
 				throw new ArgumentError("[FeelingStage] Broadcast of bubbling events is prohibited");
 			
 			dispatchEventOnChildren(e);
+		}
+		
+		public override function hitTestPoint(localPoint:Point, forTouch:Boolean=false):DisplayObject
+		{
+			if (forTouch && (!visible || !touchable))
+				return null;
+			
+			// if nothing else is hit, the stage returns itself as target
+			var target:DisplayObject = super.hitTestPoint(localPoint, forTouch);
+			return target ? target : this;
 		}
     }
 }

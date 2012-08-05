@@ -90,6 +90,30 @@ package feeling.display
 			
 			return matrix;
 		}
+
+		public function get width():Number { return getBounds(_parent).width; }
+		public function set width(value:Number):void
+		{
+			// this method call 'this.scaleX' instead of changing _scaleX directly.
+			// that way, subclasses reacting on size changes need to override only the scaleX method
+			_scaleX = 1.0;
+			var actualWidth:Number = width;
+			if (actualWidth != 0.0)
+				scaleX = value / actualWidth;
+			else
+				scaleX = 1.0;
+		}
+		
+		public function get height():Number { return getBounds(_parent).height; }
+		public function set height(value:Number):void
+		{
+			_scaleY = 1.0;
+			var actualHeight:Number = height;
+			if (actualHeight != 0.0)
+				scaleY = value / actualHeight;
+			else
+				scaleY = 1.0;
+		}
 		
 		public function get root():DisplayObject
 		{

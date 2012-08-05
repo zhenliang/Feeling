@@ -171,7 +171,7 @@ package feeling.core
 		private function onKeyboardEvent(e:KeyboardEvent):void
 		{
 			import feeling.events.KeyboardEvent;
-			var keyboardEvent:feeling.events.KeyboardEvent = new feeling.events.KeyboardEvent(e.type, e.charCode);
+			var keyboardEvent:feeling.events.KeyboardEvent = new feeling.events.KeyboardEvent(e.type, e.charCode, e.keyCode);
 			
 			_feelingStage.broadcastEvent(keyboardEvent);
 			_keyboardInput.updateStatus(keyboardEvent);

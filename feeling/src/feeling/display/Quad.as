@@ -10,6 +10,10 @@ package feeling.display
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.display3D.VertexBuffer3D;
+    import flash.geom.Matrix;
+    import flash.geom.Point;
+    import flash.geom.Rectangle;
+    import flash.geom.Vector3D;
 
     public class Quad extends DisplayObject
     {
@@ -33,6 +37,41 @@ package feeling.display
 			
 			super.dispose();
         }
+		
+		public override function getBounds(targetSpace:DisplayObject):Rectangle
+		{
+			var minX:Number = Number.MAX_VALUE, maxX:Number = -Number.MAX_VALUE;
+			var minY:Number = Number.MAX_VALUE, maxY:Number = -Number.MAX_VALUE;
+			
+			if (targetSpace == this) // optimization
+			{
+				for (var i:int = 0; i < 4; ++i)
+				{
+					var pos:Vector3D = _vertexData.getPostion(i);
+					minX = Math.min(minX, pos.x);
+					minY = Math.min(minY, pos.y);
+					maxX = Math.max(maxX, pos.x);
+					maxY = Math.max(maxY, pos.y);
+				}
+			}
+			else
+			{
+				var transformationMatrix:Matrix = getTransformationMatrixToSpace(targetSpace);
+				for (var k:int = 0; k < 4; ++k)
+				{
+					var point:Point = new Point();
+					point.x = _vertexData.getPostion(k).x;	
+					point.y = _vertexData.getPostion(k).y;
+					var transformedPoint:Point = transformationMatrix.transformPoint(point);
+					minX = Math.min(minX, transformedPoint.x);
+					minY = Math.min(minY, transformedPoint.y);
+					maxX = Math.max(maxX, transformedPoint.x);
+					maxY = Math.max(maxY, transformedPoint.y);
+				}
+			}
+			
+			return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+		}
 
         public override function render():void
         {

@@ -53,17 +53,20 @@ package feeling_ex
 		{
 			var kKeyboardInput:KeyboardInput = Feeling.instance.keyboardInput;
 			
+			// moveforward movebackward
 			if (kKeyboardInput.getKeyStatus("w".charCodeAt(0)))
 				move(passedTime, _forwardVec);
 			if (kKeyboardInput.getKeyStatus("s".charCodeAt(0)))
 				move(passedTime, new Vector3D(-_forwardVec.x, -_forwardVec.y, -_forwardVec.z));
 			
+			// moveleft moveright
 			var rightVec:Vector3D = _forwardVec.crossProduct(_upVec);
 			if (kKeyboardInput.getKeyStatus("d".charCodeAt(0)))
 				move(passedTime, rightVec);
 			if (kKeyboardInput.getKeyStatus("a".charCodeAt(0)))
 				move(passedTime, new Vector3D(-rightVec.x, -rightVec.y, -rightVec.z));
 			
+			// moveup movedown
 			if (kKeyboardInput.getKeyStatus("q".charCodeAt(0)))
 				move(passedTime, _upVec);
 			if (kKeyboardInput.getKeyStatus("e".charCodeAt(0)))
@@ -78,14 +81,19 @@ package feeling_ex
 			var oldUpVector:Vector3D = _upVec.clone();
 			var oldRightVector:Vector3D = oldForwardVector.crossProduct(oldUpVector);
 			
+			// pitchup pitchdown
 			if (kKeyboardInput.getKeyStatus("i".charCodeAt(0)))
 				_forwardVec = MathUtil.RotateVector3d(_forwardVec, oldRightVector, ROTATE_SPEED * passedTime);
 			if (kKeyboardInput.getKeyStatus("k".charCodeAt(0)))
 				_forwardVec = MathUtil.RotateVector3d(_forwardVec, oldRightVector, -ROTATE_SPEED * passedTime);
+			
+			// yawleft yawright
 			if (kKeyboardInput.getKeyStatus("j".charCodeAt(0)))
 				_forwardVec = MathUtil.RotateVector3d(_forwardVec, oldUpVector, ROTATE_SPEED * passedTime);
 			if (kKeyboardInput.getKeyStatus("l".charCodeAt(0)))
 				_forwardVec = MathUtil.RotateVector3d(_forwardVec, oldUpVector, -ROTATE_SPEED * passedTime);
+			
+			// rollleft rollright
 			if (kKeyboardInput.getKeyStatus("z".charCodeAt(0)))
 				rotationZ -= ROTATE_SPEED * passedTime;
 			if (kKeyboardInput.getKeyStatus("c".charCodeAt(0)))
