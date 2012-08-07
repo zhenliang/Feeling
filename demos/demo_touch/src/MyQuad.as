@@ -31,7 +31,8 @@ package
 
         private function onTouch(e:TouchEvent):void
         {
-            rotationZ = 0.0;
+            _vertexData.setUniformColor(~_vertexData.getColor(1));
+            createVertexBuffer();
         }
     }
 }

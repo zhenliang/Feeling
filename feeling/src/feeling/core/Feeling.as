@@ -14,8 +14,10 @@ package feeling.core
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.events.TouchEvent;
+    import flash.geom.Matrix3D;
     import flash.geom.Point;
     import flash.geom.Rectangle;
+    import flash.geom.Vector3D;
     import flash.ui.Multitouch;
     import flash.utils.getTimer;
 
@@ -225,6 +227,20 @@ package feeling.core
 
             function convertPosition(globalPos:Point):Point
             {
+                if (_renderSupport)
+                {
+                    var viewMatrix:Matrix3D = _renderSupport.camera.viewMatrix.clone();
+                    viewMatrix.invert();
+
+                    var globalPos3d:Vector3D = new Vector3D();
+                    globalPos3d.x = globalPos.x - _feelingStage.width / 2;
+                    globalPos3d.y = _feelingStage.height / 2 - globalPos.y;
+                    globalPos3d = viewMatrix.transformVector(globalPos3d);
+
+                    globalPos.x = globalPos3d.x;
+                    globalPos.y = globalPos3d.y;
+                }
+
                 return new Point((globalPos.x - _viewPoint.x) * (_viewPoint.width / _feelingStage.width), (globalPos.y -
                     _viewPoint.y) * (_viewPoint.height / feelingStage.height));
             }

@@ -55,9 +55,16 @@ package feeling.core
 
         // matrix manipulation
 
-        public function setupPerspectiveMatrix(width:Number, height:Number, near:Number = 0.01, far:Number = 1000.0):void
+        public function setupPerspectiveMatrix(width:Number, height:Number, near:Number = 0.001, far:Number = 1000.0):void
         {
+            _projectionMatrix.orthoRH(width, height, near, far);
+            return;
             _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
+        }
+
+        public function identityMatrix():void
+        {
+            _modelMatrix.identity();
         }
 
         // 平移
