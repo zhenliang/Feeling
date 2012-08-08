@@ -11,6 +11,8 @@ package
     {
         public function Game()
         {
+            // 只是用于平衡透视，并且镜头没非 Z 轴旋转
+
             var feeling:Feeling = Feeling.instance;
 
             feeling.feelingStage.addEventListener(TouchEvent.TOUCH, onTouch);

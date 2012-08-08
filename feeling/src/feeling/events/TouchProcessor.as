@@ -114,7 +114,7 @@ package feeling.events
                 });
 
                 // timestamps must differ for remaining touches
-                if (_queue.length != 0)
+                if (_queue.length)
                     _elapsedTime += 0.00001;
             }
         }

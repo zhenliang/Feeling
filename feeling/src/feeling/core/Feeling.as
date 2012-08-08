@@ -184,7 +184,7 @@ package feeling.core
             initializePrograms();
             initializeRoot();
 
-            _touchProcessor.simulateMultitouch = true;
+            _touchProcessor.simulateMultitouch = false;
         }
 
         private function onEnterFrame(... args):void
