@@ -79,26 +79,26 @@ package feeling.display
             return null;
         }
 
-        public function get width():Number  { return getBounds(_parent).width; }
+        public function get stageWidth():Number  { return getBounds(_parent).width; }
 
-        public function set width(value:Number):void
+        public function set stageWidth(value:Number):void
         {
             // this method call 'this.scaleX' instead of changing _scaleX directly.
             // that way, subclasses reacting on size changes need to override only the scaleX method
             _scaleX = 1.0;
-            var actualWidth:Number = width;
+            var actualWidth:Number = stageWidth;
             if (actualWidth != 0.0)
                 scaleX = value / actualWidth;
             else
                 scaleX = 1.0;
         }
 
-        public function get height():Number  { return getBounds(_parent).height; }
+        public function get stageHeight():Number  { return getBounds(_parent).height; }
 
-        public function set height(value:Number):void
+        public function set stageHeight(value:Number):void
         {
             _scaleY = 1.0;
-            var actualHeight:Number = height;
+            var actualHeight:Number = stageHeight;
             if (actualHeight != 0.0)
                 scaleY = value / actualHeight;
             else

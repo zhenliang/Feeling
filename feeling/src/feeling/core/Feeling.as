@@ -122,7 +122,7 @@ package feeling.core
             _context3d.configureBackBuffer(_viewPoint.width, _viewPoint.height, 1, false);
             _context3d.enableErrorChecking = true;
 
-            _renderSupport = new RenderSupport(_feelingStage.width, _feelingStage.height);
+            _renderSupport = new RenderSupport(_feelingStage.stageWidth, _feelingStage.stageHeight);
             _feelingStage.addChild(_renderSupport.camera);
 
             trace("[Feeling] Displayer Driver: " + _context3d.driverInfo);
@@ -233,16 +233,16 @@ package feeling.core
                     viewMatrix.invert();
 
                     var globalPos3d:Vector3D = new Vector3D();
-                    globalPos3d.x = globalPos.x - _feelingStage.width / 2;
-                    globalPos3d.y = _feelingStage.height / 2 - globalPos.y;
+                    globalPos3d.x = globalPos.x - _feelingStage.stageWidth / 2;
+                    globalPos3d.y = _feelingStage.stageHeight / 2 - globalPos.y;
                     globalPos3d = viewMatrix.transformVector(globalPos3d);
 
                     globalPos.x = globalPos3d.x;
                     globalPos.y = globalPos3d.y;
                 }
 
-                return new Point((globalPos.x - _viewPoint.x) * (_viewPoint.width / _feelingStage.width), (globalPos.y -
-                    _viewPoint.y) * (_viewPoint.height / feelingStage.height));
+                return new Point((globalPos.x - _viewPoint.x) * (_viewPoint.width / _feelingStage.stageWidth), (globalPos.y -
+                    _viewPoint.y) * (_viewPoint.height / feelingStage.stageHeight));
             }
 
             function getPhaseFromMouseEvent(e:MouseEvent):String

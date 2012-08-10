@@ -16,13 +16,13 @@ package feeling.display
             _height = height;
         }
 
-        public override function set width(val:Number):void  { throw new Error(); }
+        public override function set stageWidth(val:Number):void  { throw new Error(); }
 
-        public override function set height(val:Number):void  { throw new Error(); }
+        public override function set stageHeight(val:Number):void  { throw new Error(); }
 
-        public override function get width():Number  { return _width; }
+        public override function get stageWidth():Number  { return _width; }
 
-        public override function get height():Number  { return _height; }
+        public override function get stageHeight():Number  { return _height; }
 
         public function advanceTime(passedTime:Number):void
         {

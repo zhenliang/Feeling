@@ -23,8 +23,6 @@ package feeling.core
 
         private var _matrixStack:Vector.<Matrix3D>;
 
-        private var _quadIndexBuffer:IndexBuffer3D;
-
         // construction
 
         public function RenderSupport(width:Number, height:Number)
@@ -37,9 +35,6 @@ package feeling.core
             setupPerspectiveMatrix(width, height);
 
             _matrixStack = new Vector.<Matrix3D>();
-
-            _quadIndexBuffer = Feeling.instance.context3d.createIndexBuffer(6);
-            _quadIndexBuffer.uploadFromVector(Vector.<uint>([0, 1, 2, 1, 2, 3]), 0, 6);
         }
 
         // camera
@@ -57,8 +52,8 @@ package feeling.core
 
         public function setupPerspectiveMatrix(width:Number, height:Number, near:Number = 0.001, far:Number = 1000.0):void
         {
-            _projectionMatrix.orthoRH(width, height, near, far);
-            // _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
+            // _projectionMatrix.orthoRH(width, height, near, far);
+            _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
         }
 
         public function identityMatrix():void
@@ -119,8 +114,6 @@ package feeling.core
 
         // other helper methods
 
-        public function get quadIndexBuffer():IndexBuffer3D  { return _quadIndexBuffer; }
-
         public function setupDefaultBlendFactors():void
         {
             Feeling.instance.context3d.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
@@ -135,7 +128,6 @@ package feeling.core
 
         public function dispose():void
         {
-            _quadIndexBuffer.dispose();
         }
     }
 }

@@ -9,6 +9,7 @@ package feeling.display
     import flash.display3D.Context3D;
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DVertexBufferFormat;
+    import flash.display3D.IndexBuffer3D;
     import flash.display3D.VertexBuffer3D;
     import flash.geom.Matrix;
     import flash.geom.Point;
@@ -19,6 +20,7 @@ package feeling.display
     {
         protected var _vertexData:VertexData;
         protected var _vertexBuffer:VertexBuffer3D;
+        protected var _indexBuffer:IndexBuffer3D;
 
         public function Quad(width:Number, height:Number, color:uint = 0xffffff)
         {
@@ -34,6 +36,8 @@ package feeling.display
         {
             if (_vertexBuffer)
                 _vertexBuffer.dispose();
+            if (_indexBuffer)
+                _indexBuffer.dispose();
 
             super.dispose();
         }
@@ -81,6 +85,8 @@ package feeling.display
 
             if (_vertexBuffer == null)
                 createVertexBuffer();
+            if (_indexBuffer == null)
+                createIndexBuffer();
 
             var alphaVector:Vector.<Number> = new <Number>[alpha, alpha, alpha, alpha];
 
@@ -89,7 +95,7 @@ package feeling.display
             context.setVertexBufferAt(1, _vertexBuffer, VertexData.COLOR_OFFSET, Context3DVertexBufferFormat.FLOAT_3);
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, renderSupport.mvpMatrix, true);
             context.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, alphaVector, 1);
-            context.drawTriangles(renderSupport.quadIndexBuffer, 0, 2);
+            context.drawTriangles(_indexBuffer, 0, 2);
 
             context.setVertexBufferAt(0, null);
             context.setVertexBufferAt(1, null);
@@ -100,6 +106,14 @@ package feeling.display
             if (_vertexBuffer)
                 _vertexBuffer.dispose();
             _vertexBuffer = _vertexData.toVertexBuffer();
+        }
+
+        protected function createIndexBuffer():void
+        {
+            if (_indexBuffer)
+                _indexBuffer.dispose();
+            _indexBuffer = Feeling.instance.context3d.createIndexBuffer(6);
+            _indexBuffer.uploadFromVector(Vector.<uint>([0, 1, 2, 1, 2, 3]), 0, 6);
         }
     }
 }
