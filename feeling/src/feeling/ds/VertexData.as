@@ -17,12 +17,12 @@ package feeling.ds
 
         private var _data:Vector.<Number>;
 
+        // ctrs
+
         public function VertexData(numVertices:int)
         {
             _data = new Vector.<Number>(numVertices * ELEMENTS_PER_VERTEX, true);
         }
-
-        // functions
 
         public function clone():VertexData
         {
@@ -32,9 +32,11 @@ package feeling.ds
             return clone;
         }
 
+        // functions
+
         public function setPosition(vertexId:int, x:Number, y:Number, z:Number = 0.0):void
         {
-            setValues(getOffset(vertexId), x, y, z);
+            setValues(getOffset(vertexId) + POSITION_OFFSET, x, y, z);
         }
 
         public function getPostion(vertexId:int):Vector3D
@@ -43,16 +45,16 @@ package feeling.ds
             return new Vector3D(_data[offset], _data[offset + 1], _data[offset + 2]);
         }
 
-        public function setColor(vertexId:int, color:uint):void
+        public function setColor(vertexId:int, rgb:uint):void
         {
-            setValues(getOffset(vertexId) + COLOR_OFFSET, Color.getRed(color) / 255, Color.getGreen(color) / 255, Color.
-                getBlue(color) / 255);
+            setValues(getOffset(vertexId) + COLOR_OFFSET, Color.getRed(rgb) / 255, Color.getGreen(rgb) / 255, Color.getBlue(rgb) /
+                255);
         }
 
-        public function setUniformColor(color:uint):void
+        public function setUniformColor(rgb:uint):void
         {
             for (var i:int = 0; i < numVertices; ++i)
-                setColor(i, color);
+                setColor(i, rgb);
         }
 
         public function getColor(vertexId:int):uint
@@ -98,7 +100,7 @@ package feeling.ds
             _data[offset + 2] += deltaZ;
         }
 
-        public function transformVertex(vertexId:int, matrix:Matrix3D, alpha:Number = 1.0):void
+        public function transformVertex(vertexId:int, matrix:Matrix3D = null, alpha:Number = 1.0):void
         {
             if (matrix)
             {
