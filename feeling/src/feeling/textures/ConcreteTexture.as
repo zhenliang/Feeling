@@ -20,6 +20,7 @@ package feeling.textures
         public override function dispose():void
         {
             _base.dispose();
+            super.dispose();
         }
 
         public override function get width():Number  { return _width; }

@@ -29,7 +29,7 @@ package feeling.textures
             var nativeTexture:flash.display3D.textures.Texture = Feeling.instance.context3d.createTexture(legalWidth, legalHeight,
                 format, optimizeForRenderTexture);
 
-            if (legalWidth > origWidth || legalHeight > origHeight)
+            if ((legalWidth > origWidth) || (legalHeight > origHeight))
             {
                 var potData:BitmapData = new BitmapData(legalWidth, legalHeight, true, 0);
                 potData.copyPixels(data, data.rect, new Point(0, 0));

@@ -44,6 +44,8 @@ package feeling.textures
             return newData;
         }
 
+        public function get baseTexture():Texture  { return _baseTexture; }
+
         public function get clipping():Rectangle  { return clipping.clone(); }
 
         public function set clipping(value:Rectangle):void
