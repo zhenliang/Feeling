@@ -57,7 +57,7 @@ package feeling.ds
         public function getColor(vertexId:int):uint
         {
             var offset:int = getOffset(vertexId) + COLOR_OFFSET;
-            return Color.create(_data[offset] * 255, _data[offset + 1] * 255, _data[offset + 2] * 255);
+            return Color.createRgb(_data[offset] * 255, _data[offset + 1] * 255, _data[offset + 2] * 255);
         }
 
         public function setTexCoords(vertexId:int, u:Number, v:Number):void

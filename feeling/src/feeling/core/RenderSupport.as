@@ -119,9 +119,10 @@ package feeling.core
             Feeling.instance.context3d.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
         }
 
-        public function clear(color:uint = 0x0):void
+        public function clear(argb:uint = 0x0):void
         {
-            Feeling.instance.context3d.clear(Color.getRed(color), Color.getGreen(color), Color.getBlue(color));
+            Feeling.instance.context3d.clear(Color.getRed(argb) / 255, Color.getGreen(argb) / 255, Color.getBlue(argb) /
+                255);
         }
 
         // cleanup

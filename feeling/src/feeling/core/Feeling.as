@@ -51,6 +51,8 @@ package feeling.core
         private var _keyboardInput:KeyboardInput;
         private var _touchProcessor:TouchProcessor;
 
+        private var _antiAliasing:int;
+
         private var _viewPoint:Rectangle;
 
         private var _started:Boolean;
@@ -77,6 +79,8 @@ package feeling.core
             _stage3d = stage3D;
             _stage3d.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated, false, 0, true);
             _stage3d.requestContext3D(renderMode);
+
+            _antiAliasing = 0;
 
             _lastFrameTimestamp = getTimer() / 1000.0;
 
@@ -119,7 +123,7 @@ package feeling.core
             _stage3d.y = _viewPoint.y;
 
             _context3d = _stage3d.context3D;
-            _context3d.configureBackBuffer(_viewPoint.width, _viewPoint.height, 1, false);
+            _context3d.configureBackBuffer(_viewPoint.width, _viewPoint.height, _antiAliasing, false);
             _context3d.enableErrorChecking = true;
 
             _renderSupport = new RenderSupport(_feelingStage.stageWidth, _feelingStage.stageHeight);
@@ -155,6 +159,15 @@ package feeling.core
         public function start():void  { _started = true; }
 
         public function stop():void  { _started = false; }
+
+        public function get antiAliasing():int  { return _antiAliasing; }
+
+        public function set antiAliasing(value:int):void
+        {
+            _antiAliasing = value;
+            if (_context3d)
+                context3d.configureBackBuffer(_viewPoint.width, _viewPoint.height, _antiAliasing, false);
+        }
 
         private function render():void
         {
@@ -241,8 +254,8 @@ package feeling.core
                     globalPos.y = globalPos3d.y;
                 }
 
-                return new Point((globalPos.x - _viewPoint.x) * (_viewPoint.width / _feelingStage.stageWidth), (globalPos.y -
-                    _viewPoint.y) * (_viewPoint.height / feelingStage.stageHeight));
+                return new Point((globalPos.x - _viewPoint.x) * (_viewPoint.width / _feelingStage.stageWidth), (globalPos.
+                    y - _viewPoint.y) * (_viewPoint.height / feelingStage.stageHeight));
             }
 
             function getPhaseFromMouseEvent(e:MouseEvent):String

@@ -27,14 +27,14 @@ package feeling.events
             _target = target;
         }
 
-        public function getLocationInSpace(space:DisplayObject):Point
+        public function getLocation(space:DisplayObject):Point
         {
             var point:Point = new Point(_globalX, _globalY);
             var transformationMatrix:Matrix = _target.root.getTransformationMatrixToSpace(space);
             return transformationMatrix.transformPoint(point);
         }
 
-        public function getPreviousLocationInSpace(space:DisplayObject):Point
+        public function getPreviousLocation(space:DisplayObject):Point
         {
             var point:Point = new Point(_previousGlobalX, _previousGlobalY);
             var transformationMatrix:Matrix = _target.root.getTransformationMatrixToSpace(space);
