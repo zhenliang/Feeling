@@ -127,9 +127,8 @@ package feeling.ds
 
         // properties
 
-        public function get numVertices():int
-        {
-            return _data.length / ELEMENTS_PER_VERTEX;
-        }
+        public function get numVertices():int  { return _data.length / ELEMENTS_PER_VERTEX; }
+
+        public function get data():Vector.<Number>  { return _data; }
     }
 }

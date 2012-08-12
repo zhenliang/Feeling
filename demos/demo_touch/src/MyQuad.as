@@ -51,9 +51,11 @@ package
 
         private function SetColor(color:uint):void
         {
-            _vertexData.setUniformColor(~_vertexData.getColor(1));
-            // _vertexData.setUniformColor(color);
-            createVertexBuffer();
+            // this.color = ~_vertexData.getColor(1);
+            setVertexColor(0, ~_vertexData.getColor(1));
+            setVertexColor(1, ~_vertexData.getColor(2));
+            setVertexColor(2, ~_vertexData.getColor(3));
+            setVertexColor(3, ~_vertexData.getColor(0));
         }
     }
 }

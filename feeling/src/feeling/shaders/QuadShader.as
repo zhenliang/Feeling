@@ -18,7 +18,7 @@ package feeling.shaders
                 );
 
             var fragmentProgramAssembler:AGALMiniAssembler = new AGALMiniAssembler();
-            fragmentProgramAssembler.assemble(Context3DProgramType.FRAGMENT, "mul ft0, v0, fc0 \n" // multiply alpha (fc0) by color (vc0)
+            fragmentProgramAssembler.assemble(Context3DProgramType.FRAGMENT, "mul ft0, v0, fc0 \n" // multiply alpha (fc0) by color (v0)
                 + "mov oc, ft0 \n" // output color
                 );
 

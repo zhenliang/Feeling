@@ -19,7 +19,7 @@ package feeling.textures
 
         public function get height():Number  { return 0; }
 
-        public function get nativeTexture():TextureBase  { return null; }
+        public function get base():TextureBase  { return null; }
 
         public function adjustVertexData(vertexData:VertexData):VertexData  { return null; }
     }

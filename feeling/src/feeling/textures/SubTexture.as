@@ -24,7 +24,7 @@ package feeling.textures
 
         public override function get height():Number  { return _baseTexture.height * _clipping.height; }
 
-        public override function get nativeTexture():TextureBase  { return _baseTexture.nativeTexture; }
+        public override function get base():TextureBase  { return _baseTexture.base; }
 
         public override function adjustVertexData(vertexData:VertexData):VertexData
         {

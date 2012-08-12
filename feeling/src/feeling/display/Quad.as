@@ -42,6 +42,29 @@ package feeling.display
             super.dispose();
         }
 
+        public function get color():uint  { return _vertexData.getColor(0); }
+
+        public function set color(value:uint):void
+        {
+            _vertexData.setUniformColor(value);
+            if (_vertexBuffer)
+                createVertexBuffer();
+        }
+
+        public function getVertexColor(vertexId:int):uint
+        {
+            return _vertexData.getColor(vertexId);
+        }
+
+        public function setVertexColor(vertexId:int, color:int):void
+        {
+            _vertexData.setColor(vertexId, color);
+            if (_vertexBuffer)
+                createVertexBuffer();
+        }
+
+        public function get vertexData():VertexData  { return _vertexData.clone(); }
+
         public override function getBounds(targetSpace:DisplayObject):Rectangle
         {
             var minX:Number = Number.MAX_VALUE, maxX:Number = -Number.MAX_VALUE;
@@ -103,16 +126,15 @@ package feeling.display
 
         protected function createVertexBuffer():void
         {
-            if (_vertexBuffer)
-                _vertexBuffer.dispose();
-            _vertexBuffer = _vertexData.toVertexBuffer();
+            if (!_vertexBuffer)
+                _vertexBuffer = Feeling.instance.context3d.createVertexBuffer(4, VertexData.ELEMENTS_PER_VERTEX);
+            _vertexBuffer.uploadFromVector(vertexData.data, 0, 4);
         }
 
         protected function createIndexBuffer():void
         {
-            if (_indexBuffer)
-                _indexBuffer.dispose();
-            _indexBuffer = Feeling.instance.context3d.createIndexBuffer(6);
+            if (!_indexBuffer)
+                _indexBuffer = Feeling.instance.context3d.createIndexBuffer(6);
             _indexBuffer.uploadFromVector(Vector.<uint>([0, 1, 2, 1, 2, 3]), 0, 6);
         }
     }

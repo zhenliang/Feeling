@@ -53,7 +53,7 @@ package feeling.display
             var alphaVec:Vector.<Number> = new <Number>[alpha, alpha, alpha, alpha];
 
             context.setProgram(shaderMgr.getProgram(ImageShader.PROGRAM_NAME));
-            context.setTextureAt(1, _texture.nativeTexture);
+            context.setTextureAt(1, _texture.base);
             context.setVertexBufferAt(0, _vertexBuffer, VertexData.POSITION_OFFSET, Context3DVertexBufferFormat.FLOAT_3);
             context.setVertexBufferAt(1, _vertexBuffer, VertexData.COLOR_OFFSET, Context3DVertexBufferFormat.FLOAT_3);
             context.setVertexBufferAt(2, _vertexBuffer, VertexData.TEXCOORD_OFFSET, Context3DVertexBufferFormat.FLOAT_2);
