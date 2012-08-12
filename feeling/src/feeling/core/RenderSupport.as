@@ -82,15 +82,20 @@ package feeling.core
         // 转换
         public function transformMatrix(object:DisplayObject):void
         {
-            translateMatrix(object.x, object.y, object.z);
+            transformMatrixForObject(_modelMatrix, object);
+        }
 
-            rotateMatrix(object.rotationX, Vector3D.X_AXIS);
-            rotateMatrix(object.rotationY, Vector3D.Y_AXIS);
-            rotateMatrix(object.rotationZ, Vector3D.Z_AXIS);
+        public static function transformMatrixForObject(matrix:Matrix3D, object:DisplayObject):void
+        {
+            matrix.prependTranslation(object.x, object.y, object.z);
 
-            scaleMatrix(object.scaleX, object.scaleY, object.scaleZ);
+            matrix.prependRotation(object.rotationX, Vector3D.X_AXIS);
+            matrix.prependRotation(object.rotationY, Vector3D.Y_AXIS);
+            matrix.prependRotation(object.rotationZ, Vector3D.Z_AXIS);
 
-            translateMatrix(-object.pivotX, -object.pivotY, -object.pivotZ);
+            matrix.prependScale(object.scaleX, object.scaleY, object.scaleZ);
+
+            matrix.prependTranslation(-object.pivotX, -object.pivotY, -object.pivotZ);
         }
 
         public function pushMatrix():void
