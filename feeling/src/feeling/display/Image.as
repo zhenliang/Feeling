@@ -12,6 +12,7 @@ package feeling.display
     import flash.display3D.Context3D;
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DVertexBufferFormat;
+    import flash.geom.Point;
 
     public class Image extends Quad
     {
@@ -36,6 +37,31 @@ package feeling.display
             else
             {
                 throw new Error();
+            }
+        }
+
+        public function getTexCoords(vertexId:int):Point  { return _vertexData.getTexCoords(vertexId); }
+
+        public function setTexCoords(vertexId:int, coords:Point):void
+        {
+            _vertexData.setTexCoords(vertexId, coords.x, coords.y);
+            if (_vertexBuffer)
+                createVertexBuffer();
+        }
+
+        public override function get vertexData():VertexData  { return _texture.adjustVertexData(_vertexData); }
+
+        public function get texture():Texture  { return _texture; }
+
+        public function set texture(value:Texture):void
+        {
+            if (!value)
+                throw new Error();
+            else if (value != _texture)
+            {
+                _texture = value;
+                if (_vertexBuffer)
+                    createVertexBuffer();
             }
         }
 
@@ -65,13 +91,6 @@ package feeling.display
             context.setVertexBufferAt(0, null);
             context.setVertexBufferAt(1, null);
             context.setVertexBufferAt(2, null);
-        }
-
-        protected override function createVertexBuffer():void
-        {
-            if (_vertexBuffer)
-                _vertexBuffer.dispose();
-            _vertexBuffer = _texture.adjustVertexData(_vertexData).toVertexBuffer();
         }
     }
 }
