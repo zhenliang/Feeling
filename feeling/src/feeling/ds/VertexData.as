@@ -4,6 +4,7 @@ package feeling.ds
 
     import flash.display3D.Context3D;
     import flash.display3D.VertexBuffer3D;
+    import flash.geom.Matrix3D;
     import flash.geom.Point;
     import flash.geom.Vector3D;
 
@@ -71,6 +72,14 @@ package feeling.ds
             return new Point(_data[offset], _data[offset + 1]);
         }
 
+        public function append(data:VertexData):void
+        {
+            _data.fixed = false;
+            for each (var element:Number in data)
+                _data.push(element);
+            _data.fixed = true;
+        }
+
         public function toVertexBuffer():VertexBuffer3D
         {
             var context:Context3D = Feeling.instance.context3d;
@@ -80,6 +89,30 @@ package feeling.ds
         }
 
         // helpers
+
+        public function translateVertex(vertexId:int, deltaX:Number, deltaY:Number, deltaZ:Number = 0.0):void
+        {
+            var offset:int = getOffset(vertexId) + POSITION_OFFSET;
+            _data[offset] += deltaX;
+            _data[offset + 1] += deltaY;
+            _data[offset + 2] += deltaZ;
+        }
+
+        public function transformVertex(vertexId:int, matrix:Matrix3D, alpha:Number = 1.0):void
+        {
+            if (matrix)
+            {
+                var position:Vector3D = getPostion(vertexId);
+                var transPosition:Vector3D = matrix.transformVector(position);
+                setPosition(vertexId, transPosition.x, transPosition.y, transPosition.z);
+            }
+
+            if (alpha < 1.0)
+            {
+                setColor(vertexId, getColor(vertexId) * alpha);
+            }
+
+        }
 
         private function setValues(offset:int, ... values):void
         {

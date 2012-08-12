@@ -187,6 +187,8 @@ package feeling.core
             _context3d.clear();
             _feelingStage.render();
             _context3d.present();
+
+            _renderSupport.resetMatrix();
         }
 
         // event handlers

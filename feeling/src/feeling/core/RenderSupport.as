@@ -103,6 +103,14 @@ package feeling.core
             _modelMatrix = _matrixStack.pop();
         }
 
+        public function resetMatrix():void
+        {
+            if (_matrixStack.length)
+                _matrixStack = new Vector.<Matrix3D>();
+
+            identityMatrix();
+        }
+
         public function get mvpMatrix():Matrix3D
         {
             var mvpMatrix:Matrix3D = new Matrix3D();

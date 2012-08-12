@@ -11,12 +11,12 @@ package feeling.textures
 
     public class TextureCreator
     {
-        public static function createFromBitmap(bitmap:Bitmap):Texture
+        public static function createFromBitmap(bitmap:Bitmap, optimizeForRenderTexture:Boolean = false):Texture
         {
-            return createFromBitmapData(bitmap.bitmapData);
+            return createFromBitmapData(bitmap.bitmapData, optimizeForRenderTexture);
         }
 
-        public static function createFromBitmapData(data:BitmapData):Texture
+        public static function createFromBitmapData(data:BitmapData, optimizeForRenderTexture:Boolean = false):Texture
         {
             var origWidth:int = data.width;
             var origHeight:int = data.height;
@@ -27,7 +27,7 @@ package feeling.textures
 
             import flash.display3D.textures.Texture;
             var nativeTexture:flash.display3D.textures.Texture = Feeling.instance.context3d.createTexture(legalWidth, legalHeight,
-                format, false);
+                format, optimizeForRenderTexture);
 
             if (legalWidth > origWidth || legalHeight > origHeight)
             {
