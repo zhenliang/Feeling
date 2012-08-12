@@ -4,8 +4,8 @@ package feeling.events
 
     public class KeyboardEvent extends Event
     {
-        public static const KEY_DOWN:String = flash.events.KeyboardEvent.KEY_DOWN;
-        public static const KEY_UP:String = flash.events.KeyboardEvent.KEY_UP;
+        public static const KEY_DOWN:String = "keyDown";
+        public static const KEY_UP:String = "keyUp";
 
         private var _charCode:uint;
         private var _keyCode:uint;

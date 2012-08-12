@@ -3,8 +3,8 @@ package feeling.events
 
     public class Event
     {
-        public static const ADDED_TO_PARENT:String = "added_to_parent";
-        public static const REMOVED_FROM_PARENT:String = "removed_from_parent";
+        public static const ADDED:String = "added";
+        public static const REMOVED:String = "removed";
         public static const ADDED_TO_STAGE:String = "addedToStage";
         public static const REMOVED_FROM_STAGE:String = "removedFromStage";
         public static const ENTER_FRAME:String = "enterFrame";

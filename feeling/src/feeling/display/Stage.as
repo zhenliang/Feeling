@@ -16,13 +16,26 @@ package feeling.display
             _height = height;
         }
 
-        public override function set stageWidth(val:Number):void  { throw new Error(); }
+        public override function set x(value:Number):void  { throw new Error(); }
+        public override function set y(value:Number):void  { throw new Error(); }
+        public override function set z(value:Number):void  { throw new Error(); }
+        public override function set scaleX(value:Number):void  { throw new Error(); }
+        public override function set scaleY(value:Number):void  { throw new Error(); }
+        public override function set scaleZ(value:Number):void  { throw new Error(); }
+        public override function set rotationX(value:Number):void  { throw new Error(); }
+        public override function set rotationY(value:Number):void  { throw new Error(); }
+        public override function set rotationZ(value:Number):void  { throw new Error(); }
+        public override function set pivotX(value:Number):void  { throw new Error(); }
+        public override function set pivotY(value:Number):void  { throw new Error(); }
+        public override function set pivotZ(value:Number):void  { throw new Error(); }
+        public override function set width(val:Number):void  { throw new Error(); }
+        public override function set height(val:Number):void  { throw new Error(); }
 
-        public override function set stageHeight(val:Number):void  { throw new Error(); }
+        public override function get width():Number  { throw new Error(); }
+        public override function get height():Number  { throw new Error(); }
 
-        public override function get stageWidth():Number  { return _width; }
-
-        public override function get stageHeight():Number  { return _height; }
+        public function get stageWidth():Number  { return _width; }
+        public function get stageHeight():Number  { return _height; }
 
         public function advanceTime(passedTime:Number):void
         {

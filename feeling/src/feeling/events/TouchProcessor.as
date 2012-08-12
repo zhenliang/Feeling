@@ -165,7 +165,7 @@ package feeling.events
                 if (simulateMultitouch)
                 {
                     _touchMarker.visible = _ctrlDown;
-                    _touchMarker.moveCenter(_root.stageWidth / 2, _root.stageHeight / 2);
+                    _touchMarker.moveCenter(_root.width / 2, _root.height / 2);
 
                     // if currently active, end mocked touch
                     var mockedTouch:Touch = getCurrentTouch(1);

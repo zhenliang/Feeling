@@ -38,24 +38,24 @@ package feeling.events
 
         public function hasEventListener(type:String):Boolean
         {
-            return _eventListeners != null && _eventListeners[type] != null;
+            return (_eventListeners != null) && (_eventListeners[type] != null);
         }
 
         public function dispatchEvent(event:Event):void
         {
             var listeners:Vector.<Function> = _eventListeners ? _eventListeners[event.type] : null;
-            if (listeners == null && !event.bubbles)
+            if ((listeners == null) && !event.bubbles)
                 return;
 
             // if the event already has a current target, it was re-dispatched by user -> we change
             // the target to 'this' for now, but undo that later on (instead of creating a clone)
 
             var previousTarget:EventDispatcher = event.target;
-            if (previousTarget == null || event.currentTarget != null)
+            if (!previousTarget || event.currentTarget)
                 event.setTarget(this);
             event.setCurrentTarget(this);
 
-            if (listeners != null && listeners.length != 0)
+            if (listeners && listeners.length)
             {
                 for each (var listener:Function in listeners)
                 {
@@ -66,10 +66,8 @@ package feeling.events
             var targetDisplayObject:DisplayObject = this as DisplayObject;
             event.setCurrentTarget(null); // to find out later if the event is redispatched
 
-            if (event.bubbles && targetDisplayObject != null && targetDisplayObject.parent != null)
-            {
+            if (event.bubbles && targetDisplayObject && targetDisplayObject.parent)
                 targetDisplayObject.parent.dispatchEvent(event);
-            }
 
             if (previousTarget)
                 event.setTarget(previousTarget);

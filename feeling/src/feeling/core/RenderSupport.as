@@ -13,6 +13,19 @@ package feeling.core
 
     public class RenderSupport
     {
+        public static function transformMatrixForObject(matrix:Matrix3D, object:DisplayObject):void
+        {
+            matrix.prependTranslation(object.x, object.y, object.z);
+
+            matrix.prependRotation(object.rotationX, Vector3D.X_AXIS);
+            matrix.prependRotation(object.rotationY, Vector3D.Y_AXIS);
+            matrix.prependRotation(object.rotationZ, Vector3D.Z_AXIS);
+
+            matrix.prependScale(object.scaleX, object.scaleY, object.scaleZ);
+
+            matrix.prependTranslation(-object.pivotX, -object.pivotY, -object.pivotZ);
+        }
+
         // members
 
         private var _camera:Camera;
@@ -32,15 +45,17 @@ package feeling.core
             _modelMatrix = new Matrix3D();
             _viewMatrix = new Matrix3D();
             _projectionMatrix = new PerspectiveMatrix3D();
-            setupPerspectiveMatrix(width, height);
 
             _matrixStack = new Vector.<Matrix3D>();
+
+            setupPerspectiveMatrix(width, height);
         }
+
+        public function dispose():void  {}
 
         // camera
 
         public function get camera():Camera  { return _camera; }
-
         public function set camera(camera:Camera):void
         {
             _camera.removeFromParent(true);
@@ -52,8 +67,8 @@ package feeling.core
 
         public function setupPerspectiveMatrix(width:Number, height:Number, near:Number = 0.001, far:Number = 1000.0):void
         {
-            _projectionMatrix.orthoRH(width, height, near, far);
-            // _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
+            // _projectionMatrix.orthoRH(width, height, near, far);
+            _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
         }
 
         public function identityMatrix():void
@@ -83,19 +98,6 @@ package feeling.core
         public function transformMatrix(object:DisplayObject):void
         {
             transformMatrixForObject(_modelMatrix, object);
-        }
-
-        public static function transformMatrixForObject(matrix:Matrix3D, object:DisplayObject):void
-        {
-            matrix.prependTranslation(object.x, object.y, object.z);
-
-            matrix.prependRotation(object.rotationX, Vector3D.X_AXIS);
-            matrix.prependRotation(object.rotationY, Vector3D.Y_AXIS);
-            matrix.prependRotation(object.rotationZ, Vector3D.Z_AXIS);
-
-            matrix.prependScale(object.scaleX, object.scaleY, object.scaleZ);
-
-            matrix.prependTranslation(-object.pivotX, -object.pivotY, -object.pivotZ);
         }
 
         public function pushMatrix():void
@@ -136,12 +138,6 @@ package feeling.core
         {
             Feeling.instance.context3d.clear(Color.getRed(argb) / 255, Color.getGreen(argb) / 255, Color.getBlue(argb) /
                 255);
-        }
-
-        // cleanup
-
-        public function dispose():void
-        {
         }
     }
 }
