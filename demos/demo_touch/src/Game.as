@@ -3,6 +3,7 @@ package
     import feeling.core.Feeling;
     import feeling.core.RenderSupport;
     import feeling.display.DisplayObjectContainer;
+    import feeling.display.Stage;
     import feeling.events.TouchEvent;
 
     import feeling_ex.DebugCamera;
@@ -14,10 +15,13 @@ package
             // 只是用于平衡透视，并且镜头没非 Z 轴旋转
 
             var feeling:Feeling = Feeling.instance;
-
-            feeling.feelingStage.addEventListener(TouchEvent.TOUCH, onTouch);
-
+            var feelingStage:Stage = feeling.feelingStage;
             var renderSupport:RenderSupport = feeling.renderSupport;
+
+            feelingStage.addEventListener(TouchEvent.TOUCH, onTouch);
+
+            renderSupport.ortho = true;
+
             renderSupport.camera.removeFromParent(true);
             renderSupport.camera = new DebugCamera();
 
@@ -43,7 +47,7 @@ package
 
         private function onTouch(e:TouchEvent):void
         {
-            trace(e.allToucehs + " " + e.timestamp.toFixed(5) + " " + e.target + " " + e.currentTarget);
+            trace(e.allTouches + " " + e.timestamp.toFixed(5) + " " + e.target + " " + e.currentTarget);
         }
     }
 }

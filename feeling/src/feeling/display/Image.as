@@ -13,6 +13,7 @@ package feeling.display
     import flash.display3D.Context3DProgramType;
     import flash.display3D.Context3DVertexBufferFormat;
     import flash.geom.Point;
+    import flash.geom.Rectangle;
 
     public class Image extends Quad
     {
@@ -27,7 +28,12 @@ package feeling.display
         {
             if (texture)
             {
-                super(texture.width, texture.height);
+                var frame:Rectangle = texture.frame;
+                var width:Number = frame ? frame.width : texture.width;
+                var height:Number = frame ? frame.height : texture.height;
+
+                super(width, height);
+
                 _vertexData.setTexCoords(0, 0.0, 0.0);
                 _vertexData.setTexCoords(1, 1.0, 0.0);
                 _vertexData.setTexCoords(2, 0.0, 1.0);
@@ -41,7 +47,6 @@ package feeling.display
         }
 
         public function getTexCoords(vertexId:int):Point  { return _vertexData.getTexCoords(vertexId); }
-
         public function setTexCoords(vertexId:int, coords:Point):void
         {
             _vertexData.setTexCoords(vertexId, coords.x, coords.y);
@@ -52,7 +57,6 @@ package feeling.display
         public override function get vertexData():VertexData  { return _texture.adjustVertexData(_vertexData); }
 
         public function get texture():Texture  { return _texture; }
-
         public function set texture(value:Texture):void
         {
             if (!value)

@@ -21,14 +21,13 @@ package feeling.textures
         }
 
         public override function get width():Number  { return _baseTexture.width * _clipping.width; }
-
         public override function get height():Number  { return _baseTexture.height * _clipping.height; }
 
         public override function get base():TextureBase  { return _baseTexture.base; }
 
         public override function adjustVertexData(vertexData:VertexData):VertexData
         {
-            var newData:VertexData = vertexData.clone();
+            var newData:VertexData = super.adjustVertexData(vertexData);
 
             var clipX:Number = _rootClipping.x;
             var clipY:Number = _rootClipping.y;
@@ -47,7 +46,6 @@ package feeling.textures
         public function get baseTexture():Texture  { return _baseTexture; }
 
         public function get clipping():Rectangle  { return clipping.clone(); }
-
         public function set clipping(value:Rectangle):void
         {
             _clipping = value.clone();

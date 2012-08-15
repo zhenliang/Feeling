@@ -20,7 +20,7 @@ package feeling.events
                 _eventListeners[type] = listeners.concat(new <Function>[listener]);
         }
 
-        public function remomveEventLitener(type:String, listener:Function):void
+        public function removeEventListener(type:String, listener:Function):void
         {
             var listeners:Vector.<Function> = _eventListeners[type];
             if (listeners == null)

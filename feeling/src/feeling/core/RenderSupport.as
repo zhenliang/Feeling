@@ -36,6 +36,8 @@ package feeling.core
 
         private var _matrixStack:Vector.<Matrix3D>;
 
+        private var _ortho:Boolean;
+
         // construction
 
         public function RenderSupport(width:Number, height:Number)
@@ -47,6 +49,8 @@ package feeling.core
             _projectionMatrix = new PerspectiveMatrix3D();
 
             _matrixStack = new Vector.<Matrix3D>();
+
+            _ortho = false;
 
             setupPerspectiveMatrix(width, height);
         }
@@ -63,12 +67,17 @@ package feeling.core
             Feeling.instance.feelingStage.addChild(_camera);
         }
 
+        public function get ortho():Boolean  { return _ortho; }
+        public function set ortho(value:Boolean):void  { _ortho = value; }
+
         // matrix manipulation
 
         public function setupPerspectiveMatrix(width:Number, height:Number, near:Number = 0.001, far:Number = 1000.0):void
         {
-            // _projectionMatrix.orthoRH(width, height, near, far);
-            _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
+            if (_ortho)
+                _projectionMatrix.orthoRH(width, height, near, far);
+            else
+                _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
         }
 
         public function identityMatrix():void

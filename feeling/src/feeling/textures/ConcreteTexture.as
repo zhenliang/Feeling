@@ -19,12 +19,12 @@ package feeling.textures
 
         public override function dispose():void
         {
-            _base.dispose();
+            if (_base)
+                _base.dispose();
             super.dispose();
         }
 
         public override function get width():Number  { return _width; }
-
         public override function get height():Number  { return _height; }
 
         public override function get base():TextureBase  { return _base; }

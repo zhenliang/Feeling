@@ -12,7 +12,7 @@ package feeling.events
         private var _ctrlKey:Boolean;
 
         public function TouchEvent(type:String, touches:Vector.<Touch>, shiftKey:Boolean = false, ctrlKey:Boolean = false,
-            bubbles:Boolean = false)
+            bubbles:Boolean = true)
         {
             super(type, bubbles);
             _touches = touches;
@@ -55,7 +55,7 @@ package feeling.events
             return -1.0;
         }
 
-        public function get allToucehs():Vector.<Touch>  { return _touches.concat(); }
+        public function get allTouches():Vector.<Touch>  { return _touches.concat(); }
 
         public function get shiftKey():Boolean  { return _shiftKey; }
 

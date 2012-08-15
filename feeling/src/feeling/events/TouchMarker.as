@@ -23,6 +23,7 @@ package feeling.events
             for (var i:int = 0; i < 2; ++i)
             {
                 var marker:Image = new Image(_texture);
+                marker.z = -1.0;
                 marker.pivotX = _texture.width / 2;
                 marker.pivotY = _texture.height / 2;
                 marker.touchable = false;

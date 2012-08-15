@@ -296,7 +296,7 @@ package feeling.display
             return rootMatrix;
         }
 
-        public function hitTestPoint(localPoint:Point, forTouch:Boolean = false):DisplayObject
+        public function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
         {
             // on a touch test, invisible or untouchable objects cause the test to fail
             if (forTouch && (!_visible || !_touchable))

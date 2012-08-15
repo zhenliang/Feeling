@@ -50,13 +50,13 @@ package feeling.display
             dispatchEventOnChildren(e);
         }
 
-        public override function hitTestPoint(localPoint:Point, forTouch:Boolean = false):DisplayObject
+        public override function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
         {
             if (forTouch && (!visible || !touchable))
                 return null;
 
             // if nothing else is hit, the stage returns itself as target
-            var target:DisplayObject = super.hitTestPoint(localPoint, forTouch);
+            var target:DisplayObject = super.hitTest(localPoint, forTouch);
             return target ? target : this;
         }
     }

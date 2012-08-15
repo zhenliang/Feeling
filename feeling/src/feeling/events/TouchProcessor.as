@@ -2,6 +2,7 @@ package feeling.events
 {
     import feeling.display.DisplayObject;
     import feeling.display.DisplayObjectContainer;
+    import feeling.display.Stage;
 
     import flash.geom.Point;
 
@@ -10,7 +11,7 @@ package feeling.events
         private static const MULTITAP_TIME:Number = 0.3;
         private static const MULTITAP_DISTANCE:Number = 25;
 
-        private var _root:DisplayObjectContainer;
+        private var _stage:Stage;
         private var _elapsedTime:Number;
         private var _touchMarker:TouchMarker;
 
@@ -21,22 +22,22 @@ package feeling.events
         private var _shiftDown:Boolean = false;
         private var _ctrlDown:Boolean = false;
 
-        public function TouchProcessor(root:DisplayObjectContainer)
+        public function TouchProcessor(stage:Stage)
         {
-            _root = root;
+            _stage = stage;
             _elapsedTime = 0.0;
             _currentTouches = new <Touch>[];
             _queue = new <Array>[];
             _lastTaps = new <Touch>[];
 
-            _root.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
-            _root.addEventListener(KeyboardEvent.KEY_UP, onKey);
+            _stage.addEventListener(KeyboardEvent.KEY_DOWN, onKey);
+            _stage.addEventListener(KeyboardEvent.KEY_UP, onKey);
         }
 
         public function dispose():void
         {
-            _root.remomveEventLitener(KeyboardEvent.KEY_DOWN, onKey);
-            _root.remomveEventLitener(KeyboardEvent.KEY_UP, onKey);
+            _stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKey);
+            _stage.removeEventListener(KeyboardEvent.KEY_UP, onKey);
             if (_touchMarker)
                 _touchMarker.dispose();
         }
@@ -70,16 +71,15 @@ package feeling.events
                         currentTouch.setPhase(TouchPhase.STATIONARY);
 
                     // check if target is still connected to stage, otherwise find new target
-                    if (currentTouch.target.stage == null)
-                        currentTouch.setTarget(_root.hitTestPoint(new Point(currentTouch.globalX, currentTouch.globalY),
-                            true));
+                    if (currentTouch.target && (currentTouch.target.stage == null))
+                        currentTouch.setTarget(_stage.hitTest(new Point(currentTouch.globalX, currentTouch.globalY), true));
                 }
 
                 // process new touches, but each ID only once
                 while (_queue.length && (processedTouchIds.indexOf(_queue[_queue.length - 1][0]) == -1))
                 {
                     var touchArgs:Array = _queue.pop();
-                    touchId = touchArgs[0];
+                    touchId = touchArgs[0] as int;
                     touch = getCurrentTouch(touchId);
 
                     // hovering touches need special handling (see below)
@@ -104,7 +104,8 @@ package feeling.events
                 for each (touchId in processedTouchIds)
                 {
                     touch = getCurrentTouch(touchId);
-                    touch.target.dispatchEvent(new TouchEvent(TouchEvent.TOUCH, _currentTouches, _shiftDown, _ctrlDown));
+                    if (touch.target)
+                        touch.target.dispatchEvent(new TouchEvent(TouchEvent.TOUCH, _currentTouches, _shiftDown, _ctrlDown));
                 }
 
                 // remove ended touches
@@ -128,7 +129,7 @@ package feeling.events
             {
                 _touchMarker.moveMarker(globalX, globalY, _shiftDown);
 
-                // noly mouse can hover
+                // only mouse can hover
                 if (phase != TouchPhase.HOVER)
                     _queue.unshift([1, phase, _touchMarker.mockX, _touchMarker.mockY]);
             }
@@ -150,7 +151,7 @@ package feeling.events
             touch.setTimestamp(_elapsedTime);
 
             if ((phase == TouchPhase.HOVER) || (phase == TouchPhase.BEGAN))
-                touch.setTarget(_root.hitTestPoint(position, true));
+                touch.setTarget(_stage.hitTest(position, true));
 
             if (phase == TouchPhase.BEGAN)
                 processTap(touch);
@@ -165,7 +166,11 @@ package feeling.events
                 if (simulateMultitouch)
                 {
                     _touchMarker.visible = _ctrlDown;
-                    _touchMarker.moveCenter(_root.width / 2, _root.height / 2);
+
+                    // 原来的代码
+                    // _touchMarker.moveCenter(_stage.stageWidth / 2, _stage.stageHeight / 2);
+                    // 我们的中心就是 (0, 0)
+                    _touchMarker.moveCenter(0.0, 0.0);
 
                     // if currently active, end mocked touch
                     var mockedTouch:Touch = getCurrentTouch(1);
@@ -239,7 +244,7 @@ package feeling.events
             {
                 _touchMarker = new TouchMarker();
                 _touchMarker.visible = false;
-                _root.addChild(_touchMarker);
+                _stage.addChild(_touchMarker);
             }
             else
             {

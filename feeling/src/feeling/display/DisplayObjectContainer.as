@@ -187,7 +187,7 @@ package feeling.display
             return new Rectangle();
         }
 
-        public override function hitTestPoint(localPoint:Point, forTouch:Boolean = false):DisplayObject
+        public override function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
         {
             if (forTouch && (!visible || !touchable))
                 return null;
@@ -197,7 +197,7 @@ package feeling.display
                 var child:DisplayObject = _children[i];
                 var transformationMatrix:Matrix = getTransformationMatrixToSpace(child);
                 var transformedPoint:Point = transformationMatrix.transformPoint(localPoint);
-                var target:DisplayObject = child.hitTestPoint(transformedPoint, forTouch);
+                var target:DisplayObject = child.hitTest(transformedPoint, forTouch);
                 if (target)
                     return target;
             }
