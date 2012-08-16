@@ -23,6 +23,7 @@
     <classEntry path="feeling.events.TouchEvent"/>
     <classEntry path="feeling.events.TouchProcessor"/>
     <classEntry path="feeling.events.KeyCode"/>
+    <classEntry path="feeling.textures.TextureAtlas"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
