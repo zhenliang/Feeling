@@ -166,7 +166,11 @@ package feeling.display
             var numChildren:int = _children.length;
 
             if (numChildren == 0)
-                return new Rectangle();
+            {
+                var matrix:Matrix = getTransformationMatrixToSpace(targetSpace);
+                var position:Point = matrix.transformPoint(new Point(x, y));
+                return new Rectangle(position.x, position.y);
+            }
             else if (numChildren == 1)
                 return _children[0].getBounds(targetSpace);
             else
@@ -205,23 +209,21 @@ package feeling.display
             return null;
         }
 
-        public override function render():void
+        public override function render(alpha:Number):void
         {
             var renderSupport:RenderSupport = Feeling.instance.renderSupport;
 
-            var alpha:Number = this.alpha;
+            alpha *= this.alpha;
 
             for each (var child:DisplayObject in _children)
             {
                 var childAlpha:Number = child.alpha;
-                if (child.visible && (childAlpha != 0.0) && (child.scaleX != 0) && (child.scaleY != 0))
+                if (child.visible && (child.alpha != 0.0) && (child.scaleX != 0) && (child.scaleY != 0))
                 {
                     renderSupport.pushMatrix();
 
                     renderSupport.transformMatrix(child);
-                    child.alpha *= alpha;
-                    child.render();
-                    child.alpha = childAlpha;
+                    child.render(alpha);
 
                     renderSupport.popMatrix();
                 }
@@ -251,10 +253,8 @@ package feeling.display
             var container:DisplayObjectContainer = object as DisplayObjectContainer;
             if (container)
             {
-                for (var i:int = 0; i < container.numChildren; ++i)
-                {
-                    getChildEventListeners(container.getChildAt(i), eventType, listeners);
-                }
+                for each (var child:DisplayObject in container._children)
+                    getChildEventListeners(child, eventType, listeners);
             }
         }
     }

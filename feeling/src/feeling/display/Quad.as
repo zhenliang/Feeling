@@ -116,7 +116,7 @@ package feeling.display
             return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
 
-        public override function render():void
+        public override function render(alpha:Number):void
         {
             var context:Context3D = Feeling.instance.context3d;
             var shaderMgr:ShaderManager = Feeling.instance.shaderManager;
@@ -126,6 +126,8 @@ package feeling.display
                 createVertexBuffer();
             if (_indexBuffer == null)
                 createIndexBuffer();
+
+            alpha *= this.alpha;
 
             var alphaVector:Vector.<Number> = new <Number>[alpha, alpha, alpha, alpha];
 

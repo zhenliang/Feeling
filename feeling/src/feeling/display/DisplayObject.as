@@ -80,7 +80,6 @@ package feeling.display
         }
 
         public function get width():Number  { return getBounds(_parent).width; }
-
         public function set width(value:Number):void
         {
             // this method call 'this.scaleX' instead of changing _scaleX directly.
@@ -94,7 +93,6 @@ package feeling.display
         }
 
         public function get height():Number  { return getBounds(_parent).height; }
-
         public function set height(value:Number):void
         {
             _scaleY = 1.0;
@@ -114,19 +112,15 @@ package feeling.display
         }
 
         public function get x():Number  { return _x; }
-
         public function set x(value:Number):void  { _x = value; }
 
         public function get y():Number  { return _y; }
-
         public function set y(value:Number):void  { _y = value; }
 
         public function get z():Number  { return _z; }
-
         public function set z(value:Number):void  { _z = value; }
 
         public function get rotationX():Number  { return _rotationX; }
-
         public function set rotationX(value:Number):void
         {
             // move into range [-180 deg, +180 deg]
@@ -138,7 +132,6 @@ package feeling.display
         }
 
         public function get rotationY():Number  { return _rotationY; }
-
         public function set rotationY(value:Number):void
         {
             // move into range [-180 deg, +180 deg]
@@ -150,7 +143,6 @@ package feeling.display
         }
 
         public function get rotationZ():Number  { return _rotationZ; }
-
         public function set rotationZ(value:Number):void
         {
             // move into range [-180 deg, +180 deg]
@@ -162,50 +154,32 @@ package feeling.display
         }
 
         public function get scaleX():Number  { return _scaleX; }
-
         public function set scaleX(value:Number):void  { _scaleX = value; }
-
         public function get scaleY():Number  { return _scaleY; }
-
         public function set scaleY(value:Number):void  { _scaleY = value; }
-
         public function get scaleZ():Number  { return _scaleZ; }
-
         public function set scaleZ(value:Number):void  { _scaleZ = value; }
 
         public function get pivotX():Number  { return _pivotX; }
-
         public function set pivotX(value:Number):void  { _pivotX = value; }
-
         public function get pivotY():Number  { return _pivotY; }
-
         public function set pivotY(value:Number):void  { _pivotY = value; }
-
         public function get pivotZ():Number  { return _pivotZ; }
-
         public function set pivotZ(value:Number):void  { _pivotZ = value; }
 
         public function get alpha():Number  { return _alpha; }
-
-        public function set alpha(value:Number):void
-        {
-            _alpha = Math.max(0.0, Math.min(1.0, value));
-        }
+        public function set alpha(value:Number):void  { _alpha = Math.max(0.0, Math.min(1.0, value)); }
 
         public function get visible():Boolean  { return _visible; }
-
         public function set visible(value:Boolean):void  { _visible = value; }
 
         public function get touchable():Boolean  { return _touchable; }
-
         public function set touchable(value:Boolean):void  { _touchable = value; }
 
         public function get name():String  { return _name; }
-
         public function set name(value:String):void  { _name = value; }
 
         public function get parent():DisplayObjectContainer  { return _parent; }
-
         public function get stage():Stage  { return root as Stage; }
 
         // functions
@@ -309,7 +283,7 @@ package feeling.display
             return null;
         }
 
-        public function render():void
+        public function render(alpha:Number):void
         {
             // override in subclass
         }

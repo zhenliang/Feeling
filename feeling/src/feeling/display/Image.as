@@ -69,7 +69,7 @@ package feeling.display
             }
         }
 
-        public override function render():void
+        public override function render(alpha:Number):void
         {
             var context:Context3D = Feeling.instance.context3d;
             var shaderMgr:ShaderManager = Feeling.instance.shaderManager;
@@ -80,6 +80,7 @@ package feeling.display
             if (!_indexBuffer)
                 createIndexBuffer();
 
+            alpha *= this.alpha;
             var alphaVec:Vector.<Number> = new <Number>[alpha, alpha, alpha, alpha];
 
             context.setProgram(shaderMgr.getProgram(ImageShader.PROGRAM_NAME));

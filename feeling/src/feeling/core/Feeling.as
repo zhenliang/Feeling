@@ -186,7 +186,7 @@ package feeling.core
             _renderSupport.setupDefaultBlendFactors();
 
             _context3d.clear();
-            _feelingStage.render();
+            _feelingStage.render(1.0);
             _context3d.present();
 
             _renderSupport.resetMatrix();
