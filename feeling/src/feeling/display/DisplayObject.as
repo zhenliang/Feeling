@@ -51,10 +51,6 @@ package feeling.display
             _lastTouchTimestamp = -1.0;
         }
 
-        public function dispose():void
-        {
-        }
-
         // properties
 
         public function get transformationMatrix():Matrix

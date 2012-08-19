@@ -59,14 +59,14 @@ package feeling.display
                 throw new Error();
         }
 
-        public function removeChild(child:DisplayObject):void
+        public function removeChild(child:DisplayObject, dispose:Boolean = false):void
         {
             var childIndex:int = getChildIndex(child);
             if (-1 != childIndex)
-                removeChildAt(childIndex);
+                removeChildAt(childIndex, dispose);
         }
 
-        public function removeChildAt(index:int):void
+        public function removeChildAt(index:int, dispose:Boolean = false):void
         {
             if ((index >= 0) && (index < numChildren))
             {
@@ -76,15 +76,17 @@ package feeling.display
                     child.dispatchEventOnChildren(new Event(Event.REMOVED_FROM_STAGE));
                 child.setParent(null);
                 _children.splice(index, 1);
+                if (dispose)
+                    child.dispose();
             }
             else
                 throw new Error();
         }
 
-        public function removeAllChildren():void
+        public function removeAllChildren(dispose:Boolean = false):void
         {
             for (var i:int = _children.length; i >= 0; --i)
-                removeChildAt(i);
+                removeChildAt(i, dispose);
         }
 
         public function getChildAt(index:int):DisplayObject

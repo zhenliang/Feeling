@@ -20,6 +20,11 @@ package feeling.events
                 _eventListeners[type] = listeners.concat(new <Function>[listener]);
         }
 
+        public function dispose():void
+        {
+            removeEventListeners();
+        }
+
         public function removeEventListener(type:String, listener:Function):void
         {
             var listeners:Vector.<Function> = _eventListeners[type];
@@ -39,6 +44,14 @@ package feeling.events
         public function hasEventListener(type:String):Boolean
         {
             return (_eventListeners != null) && (_eventListeners[type] != null);
+        }
+
+        public function removeEventListeners(type:String = null):void
+        {
+            if (type)
+                delete _eventListeners[type];
+            else
+                _eventListeners = null;
         }
 
         public function dispatchEvent(event:Event):void
