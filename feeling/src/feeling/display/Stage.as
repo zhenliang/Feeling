@@ -40,7 +40,7 @@ package feeling.display
         public function get stageHeight():int  { return _stageHeight; }
         public function set stageHeight(value:int):void  { _stageHeight = value; }
 
-        public function get color():uint  { return color; }
+        public function get color():uint  { return _color; }
         public function set color(value:uint):void  { _color = value; }
 
         public function advanceTime(passedTime:Number):void
