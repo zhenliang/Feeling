@@ -9,6 +9,7 @@ package feeling.events
         public static const REMOVED_FROM_STAGE:String = "removedFromStage";
         public static const ENTER_FRAME:String = "enterFrame";
         public static const MOVIE_COMPLETED:String = "movieCompletedg";
+        public static const RESIZE:String = "resize";
 
         private var _type:String;
         private var _bubbles:Boolean;

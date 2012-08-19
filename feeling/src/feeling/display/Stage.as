@@ -7,8 +7,8 @@ package feeling.display
 
     public class Stage extends DisplayObjectContainer
     {
-        private var _width:Number;
-        private var _height:Number;
+        private var _width:int;
+        private var _height:int;
 
         public function Stage(width:Number, height:Number)
         {
@@ -34,8 +34,10 @@ package feeling.display
         public override function get width():Number  { throw new Error(); }
         public override function get height():Number  { throw new Error(); }
 
-        public function get stageWidth():Number  { return _width; }
-        public function get stageHeight():Number  { return _height; }
+        public function get stageWidth():int  { return _width; }
+        public function set stageWidth(value:int):void  { _width = value; }
+        public function get stageHeight():int  { return _height; }
+        public function set stageHeight(value:int):void  { _height = value; }
 
         public function advanceTime(passedTime:Number):void
         {

@@ -29,6 +29,7 @@
     <classEntry path="feeling.animation.Juggler"/>
     <classEntry path="feeling.config.Config"/>
     <classEntry path="feeling.data.CoordType"/>
+    <classEntry path="feeling.events.ResizeEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

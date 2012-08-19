@@ -20,11 +20,6 @@ package feeling.events
                 _eventListeners[type] = listeners.concat(new <Function>[listener]);
         }
 
-        public function dispose():void
-        {
-            removeEventListeners();
-        }
-
         public function removeEventListener(type:String, listener:Function):void
         {
             var listeners:Vector.<Function> = _eventListeners[type];

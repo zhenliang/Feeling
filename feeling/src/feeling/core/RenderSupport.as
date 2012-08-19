@@ -2,12 +2,11 @@ package feeling.core
 {
     import com.adobe.utils.PerspectiveMatrix3D;
 
+    import feeling.data.Color;
     import feeling.display.Camera;
     import feeling.display.DisplayObject;
-    import feeling.data.Color;
 
     import flash.display3D.Context3DBlendFactor;
-    import flash.display3D.IndexBuffer3D;
     import flash.geom.Matrix3D;
     import flash.geom.Vector3D;
 

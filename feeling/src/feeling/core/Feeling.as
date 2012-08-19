@@ -3,6 +3,7 @@ package feeling.core
     import feeling.animation.Juggler;
     import feeling.display.DisplayObject;
     import feeling.display.Stage;
+    import feeling.events.ResizeEvent;
     import feeling.events.TouchPhase;
     import feeling.events.TouchProcessor;
     import feeling.input.KeyboardInput;
@@ -21,8 +22,6 @@ package feeling.core
     import flash.geom.Vector3D;
     import flash.ui.Multitouch;
     import flash.utils.getTimer;
-
-    import flashx.textLayout.events.UpdateCompleteEvent;
 
     public class Feeling
     {
@@ -98,6 +97,7 @@ package feeling.core
             flashStage.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
             flashStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyboardEvent, false, 0, true);
             flashStage.addEventListener(KeyboardEvent.KEY_UP, onKeyboardEvent, false, 0, true);
+            flashStage.addEventListener(Event.RESIZE, onResize, false, 0, true);
 
             var touchEventTypes:Array = Multitouch.supportsTouchEvents ? [TouchEvent.TOUCH_BEGIN, TouchEvent.TOUCH_MOVE,
                 TouchEvent.TOUCH_END] : [MouseEvent.MOUSE_DOWN, MouseEvent.MOUSE_MOVE, MouseEvent.MOUSE_UP];
@@ -194,7 +194,7 @@ package feeling.core
             _juggler.advanceTime(passedTime);
             _touchProcessor.advanceTime(passedTime);
 
-            _renderSupport.setupPerspectiveMatrix(_viewPoint.width, _viewPoint.height);
+            _renderSupport.setupPerspectiveMatrix(_feelingStage.stageWidth, _feelingStage.stageHeight);
             _renderSupport.setupDefaultBlendFactors();
 
             _context3d.clear();
@@ -226,7 +226,7 @@ package feeling.core
             import feeling.events.KeyboardEvent;
             var keyboardEvent:feeling.events.KeyboardEvent = new feeling.events.KeyboardEvent(e.type, e.charCode, e.keyCode);
 
-            _feelingStage.broadcastEvent(keyboardEvent);
+            _feelingStage.dispatchEvent(keyboardEvent);
             _keyboardInput.updateStatus(keyboardEvent);
         }
 
@@ -312,6 +312,17 @@ package feeling.core
 
                 return null;
             }
+        }
+
+        private function onResize(e:flash.events.Event):void
+        {
+            var stage:flash.display.Stage = e.target as flash.display.Stage;
+            _feelingStage.dispatchEvent(new ResizeEvent(Event.RESIZE, stage.stageWidth, stage.stageHeight));
+            _feelingStage.stageWidth = stage.stageWidth;
+            _feelingStage.stageHeight = stage.stageHeight;
+            _viewPoint.width = stage.stageWidth;
+            _viewPoint.height = stage.stageHeight;
+            updateViewPoint();
         }
     }
 }
