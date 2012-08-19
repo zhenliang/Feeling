@@ -4,7 +4,7 @@ package feeling.core
 
     import feeling.display.Camera;
     import feeling.display.DisplayObject;
-    import feeling.ds.Color;
+    import feeling.data.Color;
 
     import flash.display3D.Context3DBlendFactor;
     import flash.display3D.IndexBuffer3D;

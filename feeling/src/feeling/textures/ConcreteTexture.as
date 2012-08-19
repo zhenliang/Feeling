@@ -1,6 +1,6 @@
 package feeling.textures
 {
-    import feeling.ds.VertexData;
+    import feeling.data.VertexData;
 
     import flash.display3D.textures.TextureBase;
 

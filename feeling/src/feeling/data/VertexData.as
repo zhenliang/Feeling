@@ -1,4 +1,4 @@
-package feeling.ds
+package feeling.data
 {
     import feeling.core.Feeling;
 

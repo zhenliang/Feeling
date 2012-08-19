@@ -3,7 +3,7 @@ package feeling.display
     import feeling.core.Feeling;
     import feeling.core.RenderSupport;
     import feeling.core.ShaderManager;
-    import feeling.ds.VertexData;
+    import feeling.data.VertexData;
     import feeling.shaders.ImageShader;
     import feeling.textures.Texture;
     import feeling.textures.TextureCreator;

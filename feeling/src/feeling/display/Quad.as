@@ -1,9 +1,11 @@
 package feeling.display
 {
+    import feeling.config.Config;
     import feeling.core.Feeling;
     import feeling.core.RenderSupport;
     import feeling.core.ShaderManager;
-    import feeling.ds.VertexData;
+    import feeling.data.CoordType;
+    import feeling.data.VertexData;
     import feeling.shaders.QuadShader;
 
     import flash.display3D.Context3D;
@@ -25,10 +27,24 @@ package feeling.display
         public function Quad(width:Number, height:Number, color:uint = 0xffffff)
         {
             _vertexData = new VertexData(4);
-            _vertexData.setPosition(0, 0.0, 0.0);
-            _vertexData.setPosition(1, width, 0.0);
-            _vertexData.setPosition(2, 0.0, height);
-            _vertexData.setPosition(3, width, height);
+
+            if (Config.COORD_TYPE == CoordType.FLASH_2D)
+            {
+                // x 左到右，y 上到下
+                _vertexData.setPosition(0, 0.0, 0.0);
+                _vertexData.setPosition(1, width, 0.0);
+                _vertexData.setPosition(2, 0.0, height);
+                _vertexData.setPosition(3, width, height);
+            }
+            else
+            {
+                // x 左到右，y 下到上
+                _vertexData.setPosition(0, 0.0, 0.0);
+                _vertexData.setPosition(1, width, 0.0);
+                _vertexData.setPosition(2, 0.0, -height);
+                _vertexData.setPosition(3, width, -height);
+            }
+
             _vertexData.setUniformColor(color);
         }
 

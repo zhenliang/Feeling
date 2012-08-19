@@ -1,5 +1,6 @@
 package feeling.core
 {
+    import feeling.animation.Juggler;
     import feeling.display.DisplayObject;
     import feeling.display.Stage;
     import feeling.events.TouchPhase;
@@ -48,6 +49,7 @@ package feeling.core
         private var _feelingStage:Stage; // feeling stage, not flash stage
         private var _renderSupport:RenderSupport;
         private var _shaderManager:ShaderManager;
+        private var _juggler:Juggler;
         private var _keyboardInput:KeyboardInput;
         private var _touchProcessor:TouchProcessor;
 
@@ -85,6 +87,7 @@ package feeling.core
             _lastFrameTimestamp = getTimer() / 1000.0;
 
             _shaderManager = new ShaderManager();
+            _juggler = new Juggler();
             _keyboardInput = new KeyboardInput();
             _touchProcessor = new TouchProcessor(_feelingStage);
 
@@ -105,13 +108,10 @@ package feeling.core
         // functions
 
         public function get context3d():Context3D  { return _context3d; }
-
         public function get feelingStage():Stage  { return _feelingStage; }
-
         public function get renderSupport():RenderSupport  { return _renderSupport; }
-
         public function get shaderManager():ShaderManager  { return _shaderManager; }
-
+        public function get juggler():Juggler  { return _juggler; }
         public function get keyboardInput():KeyboardInput  { return _keyboardInput; }
 
         private function initializeGraphicsApi():void
@@ -179,6 +179,7 @@ package feeling.core
             _lastFrameTimestamp = nowTime;
 
             _feelingStage.advanceTime(passedTime);
+            _juggler.advanceTime(passedTime);
             _touchProcessor.advanceTime(passedTime);
 
             _renderSupport.setupPerspectiveMatrix(_viewPoint.width, _viewPoint.height);

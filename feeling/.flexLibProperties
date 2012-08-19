@@ -26,6 +26,9 @@
     <classEntry path="feeling.textures.TextureAtlas"/>
     <classEntry path="feeling.display.MovieClip"/>
     <classEntry path="feeling.animation.IAnimatable"/>
+    <classEntry path="feeling.animation.Juggler"/>
+    <classEntry path="feeling.config.Config"/>
+    <classEntry path="feeling.data.CoordType"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

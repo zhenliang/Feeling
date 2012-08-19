@@ -18,7 +18,7 @@ package feeling.display
 
         public function MovieClip(textures:Array, fps:Number = 12)
         {
-            if (texture && textures.length)
+            if (textures && textures.length)
             {
                 super(textures[0]);
 
@@ -107,7 +107,7 @@ package feeling.display
 
         // playback methods
 
-        private function play():void
+        public function play():void
         {
             _playing = true;
         }
@@ -168,6 +168,7 @@ package feeling.display
 
         public function get isComplete():Boolean
         {
+            // 返回真会被 Juggler 删除，所以这里的意义并不是播放完毕，而是完成使命
             return false;
         }
 

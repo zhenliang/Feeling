@@ -1,6 +1,8 @@
 package feeling.textures
 {
-    import feeling.ds.VertexData;
+    import feeling.config.Config;
+    import feeling.data.CoordType;
+    import feeling.data.VertexData;
 
     import flash.display3D.textures.TextureBase;
     import flash.geom.Rectangle;
@@ -35,10 +37,22 @@ package feeling.textures
                 var deltaRight:Number = _frame.width + _frame.x - width;
                 var deltaBottom:Number = _frame.width + _frame.y - height;
 
-                clone.translateVertex(0, -_frame.x, -_frame.y);
-                clone.translateVertex(1, -deltaRight, -_frame.y);
-                clone.translateVertex(2, -_frame.x, -deltaBottom);
-                clone.translateVertex(3, -deltaRight, -deltaBottom);
+                if (Config.COORD_TYPE == CoordType.FLASH_2D)
+                {
+                    // x 左到右，y 上到下
+                    clone.translateVertex(0, -_frame.x, -_frame.y);
+                    clone.translateVertex(1, -deltaRight, -_frame.y);
+                    clone.translateVertex(2, -_frame.x, -deltaBottom);
+                    clone.translateVertex(3, -deltaRight, -deltaBottom);
+                }
+                else
+                {
+                    // x 左到右，y 下到上
+                    clone.translateVertex(0, -_frame.x, _frame.y);
+                    clone.translateVertex(1, -deltaRight, _frame.y);
+                    clone.translateVertex(2, -_frame.x, deltaBottom);
+                    clone.translateVertex(3, -deltaRight, deltaBottom);
+                }
             }
 
             return clone;

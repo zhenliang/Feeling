@@ -20,7 +20,7 @@ package
             _rotateScale = Math.random();
 
             pivotX = width / 2;
-            pivotY = height / 2;
+            pivotY = -height / 2;
 
             addEventListener(Event.ENTER_FRAME, onEnterFrame);
             addEventListener(TouchEvent.TOUCH, onTouch);
