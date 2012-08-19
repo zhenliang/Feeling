@@ -47,7 +47,7 @@ package
 
         private function onTouch(e:TouchEvent):void
         {
-            trace(e.allTouches + " " + e.timestamp.toFixed(5) + " " + e.target + " " + e.currentTarget);
+            trace(e.touches + " " + e.timestamp.toFixed(5) + " " + e.target + " " + e.currentTarget);
         }
     }
 }

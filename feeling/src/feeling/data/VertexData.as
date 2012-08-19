@@ -10,10 +10,10 @@ package feeling.data
 
     public class VertexData
     {
-        public static const ELEMENTS_PER_VERTEX:int = 8;
+        public static const ELEMENTS_PER_VERTEX:int = 9;
         public static const POSITION_OFFSET:int = 0;
         public static const COLOR_OFFSET:int = 3;
-        public static const TEXCOORD_OFFSET:int = 6;
+        public static const TEXCOORD_OFFSET:int = 7;
 
         private var _data:Vector.<Number>;
 
@@ -45,22 +45,28 @@ package feeling.data
             return new Vector3D(_data[offset], _data[offset + 1], _data[offset + 2]);
         }
 
-        public function setColor(vertexId:int, rgb:uint):void
+        public function setColor(vertexId:int, rgb:uint, alpha:Number = 1.0):void
         {
             setValues(getOffset(vertexId) + COLOR_OFFSET, Color.getRed(rgb) / 255, Color.getGreen(rgb) / 255, Color.getBlue(rgb) /
-                255);
+                255, alpha);
         }
 
-        public function setUniformColor(rgb:uint):void
+        public function setUniformColor(rgb:uint, alpha:Number = 1.0):void
         {
             for (var i:int = 0; i < numVertices; ++i)
-                setColor(i, rgb);
+                setColor(i, rgb, alpha);
         }
 
         public function getColor(vertexId:int):uint
         {
             var offset:int = getOffset(vertexId) + COLOR_OFFSET;
             return Color.createRgb(_data[offset] * 255, _data[offset + 1] * 255, _data[offset + 2] * 255);
+        }
+
+        public function getAlpha(vertexId:int):uint
+        {
+            var offset:int = getOffset(vertexId) + COLOR_OFFSET + 3;
+            return _data[offset];
         }
 
         public function setTexCoords(vertexId:int, u:Number, v:Number):void
@@ -111,14 +117,16 @@ package feeling.data
 
             if (alpha < 1.0)
             {
-                setColor(vertexId, getColor(vertexId) * alpha);
+                var offset:int = getOffset(vertexId) + COLOR_OFFSET;
+                for (var i:int = 0; i < 4; ++i)
+                    _data[offset + i] *= alpha;
             }
-
         }
 
         private function setValues(offset:int, ... values):void
         {
-            for (var i:int = 0; i < values.length; ++i)
+            var numValues:int = values.length;
+            for (var i:int = 0; i < numValues; ++i)
                 _data[offset + i] = values[i];
         }
 

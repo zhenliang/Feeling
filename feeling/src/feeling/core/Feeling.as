@@ -22,6 +22,8 @@ package feeling.core
     import flash.ui.Multitouch;
     import flash.utils.getTimer;
 
+    import flashx.textLayout.events.UpdateCompleteEvent;
+
     public class Feeling
     {
         // static members
@@ -105,6 +107,16 @@ package feeling.core
             }
         }
 
+        public function dispose():void
+        {
+            if (_renderSupport)
+                _renderSupport.dispose();
+            if (_context3d)
+                _context3d.dispose();
+            if (_touchProcessor)
+                _touchProcessor.dispose();
+        }
+
         // functions
 
         public function get context3d():Context3D  { return _context3d; }
@@ -114,17 +126,31 @@ package feeling.core
         public function get juggler():Juggler  { return _juggler; }
         public function get keyboardInput():KeyboardInput  { return _keyboardInput; }
 
+        public function start():void  { _started = true; }
+        public function stop():void  { _started = false; }
+
+        public function get antiAliasing():int  { return _antiAliasing; }
+        public function set antiAliasing(value:int):void
+        {
+            _antiAliasing = value;
+            updateViewPoint();
+        }
+
+        public function get viewPoint():Rectangle  { return _viewPoint.clone(); }
+        public function set viewPoint(value:Rectangle):void
+        {
+            _viewPoint = value.clone();
+            updateViewPoint();
+        }
+
         private function initializeGraphicsApi():void
         {
             if (_context3d)
                 return;
 
-            _stage3d.x = _viewPoint.x;
-            _stage3d.y = _viewPoint.y;
-
             _context3d = _stage3d.context3D;
-            _context3d.configureBackBuffer(_viewPoint.width, _viewPoint.height, _antiAliasing, false);
             _context3d.enableErrorChecking = true;
+            updateViewPoint();
 
             _renderSupport = new RenderSupport(_feelingStage.stageWidth, _feelingStage.stageHeight);
             _feelingStage.addChild(_renderSupport.camera);
@@ -146,27 +172,13 @@ package feeling.core
             _feelingStage.addChild(game);
         }
 
-        public function dispose():void
+        private function updateViewPoint():void
         {
-            if (_renderSupport)
-                _renderSupport.dispose();
             if (_context3d)
-                _context3d.dispose();
-            if (_touchProcessor)
-                _touchProcessor.dispose();
-        }
+                _context3d.configureBackBuffer(_viewPoint.width, _viewPoint.height, _antiAliasing, false);
 
-        public function start():void  { _started = true; }
-
-        public function stop():void  { _started = false; }
-
-        public function get antiAliasing():int  { return _antiAliasing; }
-
-        public function set antiAliasing(value:int):void
-        {
-            _antiAliasing = value;
-            if (_context3d)
-                context3d.configureBackBuffer(_viewPoint.width, _viewPoint.height, _antiAliasing, false);
+            _stage3d.x = _viewPoint.x;
+            _stage3d.y = _viewPoint.y;
         }
 
         private function render():void

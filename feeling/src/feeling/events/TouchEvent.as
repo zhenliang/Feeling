@@ -48,6 +48,8 @@ package feeling.events
             return null;
         }
 
+        public function get touches():Vector.<Touch>  { return _touches.concat(); }
+
         public function get timestamp():Number
         {
             if (_touches && _touches.length)
@@ -55,10 +57,7 @@ package feeling.events
             return -1.0;
         }
 
-        public function get allTouches():Vector.<Touch>  { return _touches.concat(); }
-
         public function get shiftKey():Boolean  { return _shiftKey; }
-
         public function get ctrlKey():Boolean  { return _ctrlKey; }
     }
 }

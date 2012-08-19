@@ -28,13 +28,14 @@ package feeling.textures
         public override function adjustVertexData(vertexData:VertexData):VertexData
         {
             var newData:VertexData = super.adjustVertexData(vertexData);
+            var numVertices:int = vertexData.numVertices;
 
             var clipX:Number = _rootClipping.x;
             var clipY:Number = _rootClipping.y;
             var clipWidth:Number = _rootClipping.width;
             var clipHeight:Number = _rootClipping.height;
 
-            for (var i:int = 0; i < vertexData.numVertices; ++i)
+            for (var i:int = 0; i < numVertices; ++i)
             {
                 var texCoords:Point = vertexData.getTexCoords(i);
                 newData.setTexCoords(i, clipX + texCoords.x * clipWidth, clipY + texCoords.y * clipHeight);

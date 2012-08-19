@@ -86,7 +86,7 @@ package feeling.display
             context.setProgram(shaderMgr.getProgram(ImageShader.PROGRAM_NAME));
             context.setTextureAt(1, _texture.base);
             context.setVertexBufferAt(0, _vertexBuffer, VertexData.POSITION_OFFSET, Context3DVertexBufferFormat.FLOAT_3);
-            context.setVertexBufferAt(1, _vertexBuffer, VertexData.COLOR_OFFSET, Context3DVertexBufferFormat.FLOAT_3);
+            context.setVertexBufferAt(1, _vertexBuffer, VertexData.COLOR_OFFSET, Context3DVertexBufferFormat.FLOAT_4);
             context.setVertexBufferAt(2, _vertexBuffer, VertexData.TEXCOORD_OFFSET, Context3DVertexBufferFormat.FLOAT_2);
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, renderSupport.mvpMatrix, true);
             context.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, alphaVec, 1);
