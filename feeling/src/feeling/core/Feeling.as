@@ -77,7 +77,7 @@ package feeling.core
             _gameClass = gameClass;
 
             _viewPoint = viewPoint;
-            _feelingStage = new Stage(_viewPoint.width, _viewPoint.height);
+            _feelingStage = new Stage(_viewPoint.width, _viewPoint.height, flashStage.color);
 
             _stage3d = stage3D;
             _stage3d.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated, false, 0, true);
@@ -196,8 +196,8 @@ package feeling.core
 
             _renderSupport.setupPerspectiveMatrix(_feelingStage.stageWidth, _feelingStage.stageHeight);
             _renderSupport.setupDefaultBlendFactors();
+            _renderSupport.clear(_feelingStage.color);
 
-            _context3d.clear();
             _feelingStage.render(1.0);
             _context3d.present();
 
