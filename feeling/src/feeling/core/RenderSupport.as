@@ -137,9 +137,11 @@ package feeling.core
 
         // other helper methods
 
-        public function setupDefaultBlendFactors():void
+        public function setupDefaultBlendFactors(premultipliedAlpha:Boolean):void
         {
-            Feeling.instance.context3d.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+            var destFactor:String = Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA;
+            var sourceFactor:String = premultipliedAlpha ? Context3DBlendFactor.ONE : Context3DBlendFactor.SOURCE_ALPHA;
+            Feeling.instance.context3d.setBlendFactors(sourceFactor, destFactor);
         }
 
         public function clear(argb:uint = 0x0, alpha:Number = 0.0):void

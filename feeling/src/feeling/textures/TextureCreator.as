@@ -41,7 +41,7 @@ package feeling.textures
                 nativeTexture.uploadFromBitmapData(data);
             }
 
-            var concreteTexture:feeling.textures.Texture = new ConcreteTexture(nativeTexture, legalWidth, legalHeight);
+            var concreteTexture:feeling.textures.Texture = new ConcreteTexture(nativeTexture, legalWidth, legalHeight, true);
             return createFromTexture(concreteTexture, new Rectangle(0, 0, origWidth, origHeight));
         }
 

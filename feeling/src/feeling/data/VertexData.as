@@ -16,17 +16,19 @@ package feeling.data
         public static const TEXCOORD_OFFSET:int = 7;
 
         private var _data:Vector.<Number>;
+        private var _premultipliedAlpha:Boolean;
 
         // ctrs
 
-        public function VertexData(numVertices:int)
+        public function VertexData(numVertices:int, premultipliedAlpha:Boolean = false)
         {
             _data = new Vector.<Number>(numVertices * ELEMENTS_PER_VERTEX, true);
+            _premultipliedAlpha = premultipliedAlpha;
         }
 
         public function clone():VertexData
         {
-            var clone:VertexData = new VertexData(0);
+            var clone:VertexData = new VertexData(0, _premultipliedAlpha);
             clone._data = _data.concat();
             clone._data.fixed = true;
             return clone;
@@ -47,8 +49,9 @@ package feeling.data
 
         public function setColor(vertexId:int, rgb:uint, alpha:Number = 1.0):void
         {
-            setValues(getOffset(vertexId) + COLOR_OFFSET, Color.getRed(rgb) / 255, Color.getGreen(rgb) / 255, Color.getBlue(rgb) /
-                255, alpha);
+            var multiplier:Number = _premultipliedAlpha ? alpha : 1.0;
+            setValues(getOffset(vertexId) + COLOR_OFFSET, Color.getRed(rgb) / 255 * multiplier, Color.getGreen(rgb) / 255 *
+                multiplier, Color.getBlue(rgb) / 255 * multiplier, alpha);
         }
 
         public function setUniformColor(rgb:uint, alpha:Number = 1.0):void
@@ -60,13 +63,42 @@ package feeling.data
         public function getColor(vertexId:int):uint
         {
             var offset:int = getOffset(vertexId) + COLOR_OFFSET;
-            return Color.createRgb(_data[offset] * 255, _data[offset + 1] * 255, _data[offset + 2] * 255);
+            var divisor:Number = _premultipliedAlpha ? _data[offset + 3] : 1.0;
+            if (divisor == 0)
+                return 0;
+
+            var red:Number = _data[offset] / divisor;
+            var green:Number = _data[offset + 1] / divisor;
+            var blue:Number = _data[offset + 2] / divisor;
+            return Color.createRgb(red * 255, green * 255, blue * 255);
         }
 
         public function getAlpha(vertexId:int):uint
         {
             var offset:int = getOffset(vertexId) + COLOR_OFFSET + 3;
             return _data[offset];
+        }
+
+        public function setAlpha(vertexId:int, alpha:Number):void
+        {
+            if (_premultipliedAlpha)
+                setColor(vertexId, getColor(vertexId), alpha);
+            else
+            {
+                var offset:int = getOffset(vertexId) + COLOR_OFFSET + 3;
+                _data[offset] = alpha;
+            }
+        }
+
+        public function scaleAlpha(vertexId:int, alpha:Number):void
+        {
+            if (_premultipliedAlpha)
+                setAlpha(vertexId, getAlpha(vertexId) * alpha);
+            else
+            {
+                var offset:int = getOffset(vertexId) + COLOR_OFFSET + 3;
+                _data[offset] *= alpha;
+            }
         }
 
         public function setTexCoords(vertexId:int, u:Number, v:Number):void
@@ -106,20 +138,13 @@ package feeling.data
             _data[offset + 2] += deltaZ;
         }
 
-        public function transformVertex(vertexId:int, matrix:Matrix3D = null, alpha:Number = 1.0):void
+        public function transformVertex(vertexId:int, matrix:Matrix3D = null):void
         {
             if (matrix)
             {
                 var position:Vector3D = getPostion(vertexId);
                 var transPosition:Vector3D = matrix.transformVector(position);
                 setPosition(vertexId, transPosition.x, transPosition.y, transPosition.z);
-            }
-
-            if (alpha < 1.0)
-            {
-                var offset:int = getOffset(vertexId) + COLOR_OFFSET;
-                for (var i:int = 0; i < 4; ++i)
-                    _data[offset + i] *= alpha;
             }
         }
 
@@ -136,6 +161,31 @@ package feeling.data
         }
 
         // properties
+
+        public function get premultipliedAlpha():Boolean  { return _premultipliedAlpha; }
+        public function set premultipliedAlpha(value:Boolean):void
+        {
+            if (value == _premultipliedAlpha)
+                return;
+
+            var dataLen:int = _data.length;
+
+            for (var i:int = COLOR_OFFSET; i < dataLen; i += ELEMENTS_PER_VERTEX)
+            {
+                var alpha:Number = _data[i + 3];
+                var divisor:Number = _premultipliedAlpha ? alpha : 1.0;
+                var multiplier:Number = value ? alpha : 0.0;
+
+                if (divisor != 0)
+                {
+                    _data[i] = _data[i] / divisor * multiplier;
+                    _data[i + 1] = _data[i + 1] / divisor * multiplier;
+                    _data[i + 2] = _data[i + 2] / divisor * multiplier;
+                }
+            }
+
+            _premultipliedAlpha = value;
+        }
 
         public function get numVertices():int  { return _data.length / ELEMENTS_PER_VERTEX; }
 

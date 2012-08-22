@@ -8,22 +8,24 @@ package feeling.textures
 
     public class SubTexture extends Texture
     {
-        private var _baseTexture:Texture;
+        private var _parent:Texture;
         private var _clipping:Rectangle;
         private var _rootClipping:Rectangle;
 
-        public function SubTexture(baseTexture:Texture, region:Rectangle)
+        public function SubTexture(parentTexture:Texture, region:Rectangle)
         {
-            _baseTexture = baseTexture;
+            _parent = parentTexture;
 
-            clipping = new Rectangle(region.x / baseTexture.width, region.y / baseTexture.height, region.width / baseTexture.
-                width, region.height / baseTexture.height);
+            clipping = new Rectangle(region.x / parentTexture.width, region.y / parentTexture.height, region.width / parentTexture.
+                width, region.height / parentTexture.height);
         }
 
-        public override function get width():Number  { return _baseTexture.width * _clipping.width; }
-        public override function get height():Number  { return _baseTexture.height * _clipping.height; }
+        public override function get base():TextureBase  { return _parent.base; }
 
-        public override function get base():TextureBase  { return _baseTexture.base; }
+        public override function get width():Number  { return _parent.width * _clipping.width; }
+        public override function get height():Number  { return _parent.height * _clipping.height; }
+
+        public override function get premultipliedAlpha():Boolean  { return _parent.premultipliedAlpha; }
 
         public override function adjustVertexData(vertexData:VertexData):VertexData
         {
@@ -44,7 +46,7 @@ package feeling.textures
             return newData;
         }
 
-        public function get baseTexture():Texture  { return _baseTexture; }
+        public function get parent():Texture  { return _parent; }
 
         public function get clipping():Rectangle  { return clipping.clone(); }
         public function set clipping(value:Rectangle):void
@@ -52,15 +54,15 @@ package feeling.textures
             _clipping = value.clone();
             _rootClipping = value.clone();
 
-            var baseTexture:SubTexture = _baseTexture as SubTexture;
-            while (baseTexture)
+            var parentTexture:SubTexture = _parent as SubTexture;
+            while (parentTexture)
             {
-                var baseClipping:Rectangle = baseTexture._clipping;
-                _rootClipping.x = baseClipping.x + _rootClipping.x * baseClipping.width;
-                _rootClipping.y = baseClipping.y + _rootClipping.y * baseClipping.height;
-                _rootClipping.width *= baseClipping.width;
-                _rootClipping.height *= baseClipping.height;
-                _baseTexture = baseTexture._baseTexture as SubTexture;
+                var parentClipping:Rectangle = parentTexture._clipping;
+                _rootClipping.x = parentClipping.x + _rootClipping.x * parentClipping.width;
+                _rootClipping.y = parentClipping.y + _rootClipping.y * parentClipping.height;
+                _rootClipping.width *= parentClipping.width;
+                _rootClipping.height *= parentClipping.height;
+                _parent = parentTexture._parent as SubTexture;
             }
         }
     }

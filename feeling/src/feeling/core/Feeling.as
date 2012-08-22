@@ -81,7 +81,14 @@ package feeling.core
 
             _stage3d = stage3D;
             _stage3d.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated, false, 0, true);
-            _stage3d.requestContext3D(renderMode);
+            try
+            {
+                _stage3d.requestContext3D(renderMode);
+            }
+            catch (e:Error)
+            {
+                trace("[Feeling] Context3D error: ", e.message);
+            }
 
             _antiAliasing = 0;
 
@@ -195,7 +202,7 @@ package feeling.core
             _touchProcessor.advanceTime(passedTime);
 
             _renderSupport.setupPerspectiveMatrix(_feelingStage.stageWidth, _feelingStage.stageHeight);
-            _renderSupport.setupDefaultBlendFactors();
+            _renderSupport.setupDefaultBlendFactors(true);
             _renderSupport.clear(_feelingStage.color);
 
             _feelingStage.render(1.0);

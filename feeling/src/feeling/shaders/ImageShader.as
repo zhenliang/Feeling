@@ -12,7 +12,7 @@ package feeling.shaders
 
         public static function registerPrograms():void
         {
-            // create a vertex and fragment program - from assembly
+            // create vertex and fragment programs - from assembly
             var vertexProgramAssembler:AGALMiniAssembler = new AGALMiniAssembler();
             vertexProgramAssembler.assemble(Context3DProgramType.VERTEX, "m44 op, va0, vc0 \n" + // 4*4 matrix transform to ouput clipspace
                 "mov v0, va1 \n" + // pass color to fragment program

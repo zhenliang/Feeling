@@ -34,6 +34,7 @@ package feeling.display
 
                 super(width, height);
 
+                _vertexData.premultipliedAlpha = texture.premultipliedAlpha;
                 _vertexData.setTexCoords(0, 0.0, 0.0);
                 _vertexData.setTexCoords(1, 1.0, 0.0);
                 _vertexData.setTexCoords(2, 0.0, 1.0);
@@ -64,6 +65,7 @@ package feeling.display
             else if (value != _texture)
             {
                 _texture = value;
+                _vertexData.premultipliedAlpha = _texture.premultipliedAlpha;
                 if (_vertexBuffer)
                     createVertexBuffer();
             }
@@ -81,7 +83,10 @@ package feeling.display
                 createIndexBuffer();
 
             alpha *= this.alpha;
-            var alphaVec:Vector.<Number> = new <Number>[alpha, alpha, alpha, alpha];
+
+            var pma:Boolean = _texture.premultipliedAlpha;
+            var alphaVec:Vector.<Number> = pma ? new <Number>[alpha, alpha, alpha, alpha] : new <Number>[1.0, 1.0, 1.0, alpha];
+            renderSupport.setupDefaultBlendFactors(pma);
 
             context.setProgram(shaderMgr.getProgram(ImageShader.PROGRAM_NAME));
             context.setTextureAt(1, _texture.base);

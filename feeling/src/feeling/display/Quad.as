@@ -26,7 +26,7 @@ package feeling.display
 
         public function Quad(width:Number, height:Number, color:uint = 0xffffff)
         {
-            _vertexData = new VertexData(4);
+            _vertexData = new VertexData(4, true);
 
             if (Config.COORD_TYPE == CoordType.FLASH_2D)
             {
@@ -79,6 +79,18 @@ package feeling.display
                 createVertexBuffer();
         }
 
+        public function getVertexAlpha(vertexId:int):Number
+        {
+            return _vertexData.getAlpha(vertexId);
+        }
+
+        public function setVertexAlpha(vertexId:int, alpha:Number):void
+        {
+            _vertexData.setAlpha(vertexId, alpha);
+            if (_vertexBuffer)
+                createVertexBuffer();
+        }
+
         public function get vertexData():VertexData  { return _vertexData.clone(); }
 
         public override function getBounds(targetSpace:DisplayObject):Rectangle
@@ -126,6 +138,8 @@ package feeling.display
                 createVertexBuffer();
             if (_indexBuffer == null)
                 createIndexBuffer();
+
+            renderSupport.setupDefaultBlendFactors(true);
 
             alpha *= this.alpha;
 

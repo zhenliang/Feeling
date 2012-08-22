@@ -28,6 +28,8 @@ package feeling.textures
         public function get frame():Rectangle  { return _frame; }
         public function set frame(value:Rectangle):void  { _frame = value ? value.clone() : null; }
 
+        public function get premultipliedAlpha():Boolean  { return false; }
+
         public function adjustVertexData(vertexData:VertexData):VertexData
         {
             var clone:VertexData = vertexData.clone();
