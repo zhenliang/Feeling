@@ -61,21 +61,28 @@ package feeling.events
             var previousTarget:EventDispatcher = event.target;
             if (!previousTarget || event.currentTarget)
                 event.setTarget(this);
-            event.setCurrentTarget(this);
 
             if (listeners && listeners.length)
             {
+                event.setCurrentTarget(this);
+
+                // we can enumerate directly over the vector, since "add"- and "removeEventListener" 
+                // won't change it, but instead always create a new vector.
                 for each (var listener:Function in listeners)
                 {
                     listener(event);
                 }
             }
 
-            var targetDisplayObject:DisplayObject = this as DisplayObject;
-            event.setCurrentTarget(null); // to find out later if the event is redispatched
-
-            if (event.bubbles && targetDisplayObject && targetDisplayObject.parent)
-                targetDisplayObject.parent.dispatchEvent(event);
+            if (event.bubbles && (this is DisplayObject))
+            {
+                var targetDisplayObject:DisplayObject = this as DisplayObject;
+                if (targetDisplayObject.parent != null)
+                {
+                    event.setCurrentTarget(null); // to find out later if the event was redispatched
+                    targetDisplayObject.parent.dispatchEvent(event);
+                }
+            }
 
             if (previousTarget)
                 event.setTarget(previousTarget);
