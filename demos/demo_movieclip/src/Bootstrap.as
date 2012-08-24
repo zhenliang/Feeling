@@ -6,7 +6,7 @@ package
     import flash.display.StageAlign;
     import flash.display.StageScaleMode;
 
-    [SWF(width = "1000", height = "560", backgroundColor = "#ffffff", frameRate = "31")]
+    [SWF(width = "1000", height = "560", backgroundColor = "#ffffff", frameRate = "999")]
     public class Bootstrap extends Sprite
     {
         public function Bootstrap()

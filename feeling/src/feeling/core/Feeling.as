@@ -1,6 +1,7 @@
 package feeling.core
 {
     import feeling.animation.Juggler;
+    import feeling.data.DebugInfo;
     import feeling.display.DisplayObject;
     import feeling.display.Stage;
     import feeling.events.ResizeEvent;
@@ -10,6 +11,7 @@ package feeling.core
     import feeling.shaders.ImageShader;
     import feeling.shaders.QuadShader;
 
+    import flash.display.Sprite;
     import flash.display.Stage3D;
     import flash.display3D.Context3D;
     import flash.events.Event;
@@ -61,23 +63,30 @@ package feeling.core
         private var _started:Boolean;
         private var _lastFrameTimestamp:Number;
 
-        public function Feeling(gameClass:Class, flashStage:flash.display.Stage, viewPoint:Rectangle = null, stage3D:Stage3D =
+        private var _nativeStage:flash.display.Stage;
+        private var _nativeOverlay:flash.display.Sprite;
+
+        private var _debugInfo:DebugInfo;
+
+        public function Feeling(gameClass:Class, nativeStage:flash.display.Stage, viewPoint:Rectangle = null, stage3D:Stage3D =
             null, renderMode:String = "auto"):void
         {
             if (gameClass == null)
                 throw new Error("[Feeling] Game class must not be null");
-            if (flashStage == null)
+            if (nativeStage == null)
                 throw new Error("[Feeling] flash stage must not be null");
 
             if (viewPoint == null)
-                viewPoint = new Rectangle(0, 0, flashStage.stageWidth, flashStage.stageHeight);
+                viewPoint = new Rectangle(0, 0, nativeStage.stageWidth, nativeStage.stageHeight);
             if (stage3D == null)
-                stage3D = flashStage.stage3Ds[0];
+                stage3D = nativeStage.stage3Ds[0];
 
             _gameClass = gameClass;
 
+            _nativeStage = nativeStage;
+
             _viewPoint = viewPoint;
-            _feelingStage = new Stage(_viewPoint.width, _viewPoint.height, flashStage.color);
+            _feelingStage = new Stage(_viewPoint.width, _viewPoint.height, _nativeStage.color);
 
             _stage3d = stage3D;
             _stage3d.addEventListener(Event.CONTEXT3D_CREATE, onContextCreated, false, 0, true);
@@ -101,17 +110,19 @@ package feeling.core
 
             // flash events
 
-            flashStage.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
-            flashStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyboardEvent, false, 0, true);
-            flashStage.addEventListener(KeyboardEvent.KEY_UP, onKeyboardEvent, false, 0, true);
-            flashStage.addEventListener(Event.RESIZE, onResize, false, 0, true);
+            _nativeStage.addEventListener(Event.ENTER_FRAME, onEnterFrame, false, 0, true);
+            _nativeStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyboardEvent, false, 0, true);
+            _nativeStage.addEventListener(KeyboardEvent.KEY_UP, onKeyboardEvent, false, 0, true);
+            _nativeStage.addEventListener(Event.RESIZE, onResize, false, 0, true);
 
             var touchEventTypes:Array = Multitouch.supportsTouchEvents ? [TouchEvent.TOUCH_BEGIN, TouchEvent.TOUCH_MOVE,
                 TouchEvent.TOUCH_END] : [MouseEvent.MOUSE_DOWN, MouseEvent.MOUSE_MOVE, MouseEvent.MOUSE_UP];
             for each (var touchEventType:String in touchEventTypes)
             {
-                flashStage.addEventListener(touchEventType, onTouch, false, 0, true);
+                nativeStage.addEventListener(touchEventType, onTouch, false, 0, true);
             }
+
+            initDebugInfo();
         }
 
         public function dispose():void
@@ -148,6 +159,25 @@ package feeling.core
         {
             _viewPoint = value.clone();
             updateViewPoint();
+        }
+
+        public function get nativeOverlay():Sprite
+        {
+            if (_nativeOverlay == null)
+            {
+                _nativeOverlay = new Sprite();
+                _nativeStage.addChild(_nativeOverlay);
+                updateNativeOverlay();
+            }
+
+            return _nativeOverlay;
+        }
+
+        public function get debugInfo():Sprite
+        {
+            if (_debugInfo == null)
+                initDebugInfo();
+            return _debugInfo;
         }
 
         private function initializeGraphicsApi():void
@@ -224,6 +254,10 @@ package feeling.core
 
         private function onEnterFrame(... args):void
         {
+            if (_debugInfo)
+                updateDebugInfo();
+            if (_nativeOverlay)
+                updateNativeOverlay();
             if (_started)
                 render();
         }
@@ -330,6 +364,36 @@ package feeling.core
             _viewPoint.width = stage.stageWidth;
             _viewPoint.height = stage.stageHeight;
             updateViewPoint();
+        }
+
+        private function updateNativeOverlay():void
+        {
+            _nativeOverlay.x = _viewPoint.x;
+            _nativeOverlay.y = _viewPoint.y;
+            _nativeOverlay.scaleX = _viewPoint.width / _feelingStage.stageWidth;
+            _nativeOverlay.scaleY = _viewPoint.width / _feelingStage.stageHeight;
+
+            // Having a native overlay on top of Stage3D content can cause a performance hit on
+            // some environments. For that reason, we add it only to the stage while it's not empty.
+
+            if ((_nativeOverlay.numChildren != 0) && !_nativeOverlay.parent)
+                _nativeStage.addChild(_nativeOverlay);
+            else if ((_nativeOverlay.numChildren == 0) && _nativeOverlay.parent)
+                _nativeStage.removeChild(_nativeOverlay);
+        }
+
+        private function initDebugInfo():void
+        {
+            _debugInfo = new DebugInfo();
+            nativeOverlay.addChild(_debugInfo);
+        }
+
+        private function updateDebugInfo():void
+        {
+            _debugInfo.currentFps = 1 / (getTimer() / 1000 - _lastFrameTimestamp);
+            if (Math.abs(_debugInfo.currentFps - _debugInfo.lastFps) > 10)
+                _debugInfo.fpsTxt.text = _debugInfo.currentFps.toFixed(2);
+            _debugInfo.lastFps = _debugInfo.currentFps;
         }
     }
 }
