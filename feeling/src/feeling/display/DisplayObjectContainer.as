@@ -9,6 +9,43 @@ package feeling.display
     import flash.geom.Rectangle;
     import flash.utils.getQualifiedClassName;
 
+    /**
+     *  A DisplayObjectContainer represents a collection of display objects.
+     *  It is the base class of all display objects that act as a container for other objects. By
+     *  maintaining an ordered list of children, it defines the back-to-front positioning of the
+     *  children within the display tree.
+     *
+     *  <p>A container does not a have size in itself. The width and height properties represent the
+     *  extents of its children. Changing those properties will scale all children accordingly.</p>
+     *
+     *  <p>As this is an abstract class, you can't instantiate it directly, but have to
+     *  use a subclass instead. The most lightweight container class is "Sprite".</p>
+     *
+     *  <strong>Adding and removing children</strong>
+     *
+     *  <p>The class defines methods that allow you to add or remove children. When you add a child,
+     *  it will be added at the frontmost position, possibly occluding a child that was added
+     *  before. You can access the children via an index. The first child will have index 0, the
+     *  second child index 1, etc.</p>
+     *
+     *  Adding and removing objects from a container triggers non-bubbling events.
+     *
+     *  <ul>
+     *   <li><code>Event.ADDED</code>: the object was added to a parent.</li>
+     *   <li><code>Event.ADDED_TO_STAGE</code>: the object was added to a parent that is
+     *       connected to the stage, thus becoming visible now.</li>
+     *   <li><code>Event.REMOVED</code>: the object was removed from a parent.</li>
+     *   <li><code>Event.REMOVED_FROM_STAGE</code>: the object was removed from a parent that
+     *       is connected to the stage, thus becoming invisible now.</li>
+     *  </ul>
+     *
+     *  Especially the <code>ADDED_TO_STAGE</code> event is very helpful, as it allows you to
+     *  automatically execute some logic (e.g. start an animation) when an object is rendered the
+     *  first time.
+     *
+     *  @see Sprite
+     *  @see DisplayObject
+     */
     public class DisplayObjectContainer extends DisplayObject
     {
         // members
@@ -17,6 +54,7 @@ package feeling.display
 
         // construction
 
+        /** @private */
         public function DisplayObjectContainer()
         {
             if (getQualifiedClassName(this) == "feeling.display::DisplayObjectContainer")
@@ -25,6 +63,7 @@ package feeling.display
             _children = new Vector.<DisplayObject>();
         }
 
+        /** Disposes the resources of all children. */
         public override function dispose():void
         {
             for each (var child:DisplayObject in _children)
@@ -35,15 +74,18 @@ package feeling.display
 
         // properties
 
+        /** The number of children of this container. */
         public function get numChildren():int  { return _children.length; }
 
         // child management
 
+        /** Adds a child to the container. It will be at the frontmost position. */
         public function addChild(child:DisplayObject):void
         {
             addChildAt(child, numChildren);
         }
 
+        /** Adds a child to the container at a certain index. */
         public function addChildAt(child:DisplayObject, index:int):void
         {
             if ((index >= 0) && (index <= numChildren))
@@ -59,6 +101,8 @@ package feeling.display
                 throw new Error();
         }
 
+        /** Removes a child from the container. If the object is not a child, nothing happens.
+         *  If requested, the child will be disposed right away. */
         public function removeChild(child:DisplayObject, dispose:Boolean = false):void
         {
             var childIndex:int = getChildIndex(child);
@@ -66,6 +110,8 @@ package feeling.display
                 removeChildAt(childIndex, dispose);
         }
 
+        /** Removes a child at a certain index. Children above the child will move down. If
+         *  requested, the child will be disposed right away. */
         public function removeChildAt(index:int, dispose:Boolean = false):void
         {
             if ((index >= 0) && (index < numChildren))
@@ -83,17 +129,20 @@ package feeling.display
                 throw new Error();
         }
 
+        /** Removes all children from the container */
         public function removeAllChildren(dispose:Boolean = false):void
         {
             for (var i:int = _children.length; i >= 0; --i)
                 removeChildAt(i, dispose);
         }
 
+        /** Returns a child object at a certain index. */
         public function getChildAt(index:int):DisplayObject
         {
             return _children[index];
         }
 
+        /** Returns a child object with a certain name (non-recursively). */
         public function getChildByName(name:String):DisplayObject
         {
             for each (var currentChild:DisplayObject in _children)
@@ -102,11 +151,13 @@ package feeling.display
             return null;
         }
 
+        /** Returns the index of a child within the container, or "-1" if it is not found. */
         public function getChildIndex(child:DisplayObject):int
         {
             return _children.indexOf(child);
         }
 
+        /** Moves a child to a certain index. Children at and after the replaced position move up.*/
         public function setChildIndex(child:DisplayObject, index:int):void
         {
             var oldIndex:int = getChildIndex(child);
@@ -119,6 +170,7 @@ package feeling.display
                 throw new Error();
         }
 
+        /** Swaps the indexes of two children. */
         public function swapChildren(child1:DisplayObject, child2:DisplayObject):void
         {
             var index1:int = getChildIndex(child1);
@@ -129,6 +181,7 @@ package feeling.display
             swapChildrenAt(index1, index2);
         }
 
+        /** Swaps the indexes of two children. */
         public function swapChildrenAt(index1:int, index2:int):void
         {
             var child1:DisplayObject = getChildAt(index1);
@@ -137,6 +190,7 @@ package feeling.display
             _children[index2] = child1;
         }
 
+        /** Determines if a certain object is a child of the container (recursively). */
         public function contains(child:DisplayObject):Boolean
         {
             if (child == this)
@@ -163,6 +217,7 @@ package feeling.display
 
         // other methods
 
+        /** @inheritDoc */
         public override function getBounds(targetSpace:DisplayObject):Rectangle
         {
             var numChildren:int = _children.length;
@@ -193,6 +248,7 @@ package feeling.display
             return new Rectangle();
         }
 
+        /** @inheritDoc */
         public override function hitTest(localPoint:Point, forTouch:Boolean = false):DisplayObject
         {
             if (forTouch && (!visible || !touchable))
@@ -211,6 +267,7 @@ package feeling.display
             return null;
         }
 
+        /** @inheritDoc */
         public override function render(alpha:Number):void
         {
             var renderSupport:RenderSupport = Feeling.instance.renderSupport;
@@ -234,6 +291,7 @@ package feeling.display
 
         // internal methods
 
+        /** @private */
         internal override function dispatchEventOnChildren(event:Event):void
         {
             // the event listeners might modify the display tree, which could make crash.

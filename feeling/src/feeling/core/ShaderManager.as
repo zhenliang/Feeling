@@ -20,6 +20,7 @@ package feeling.core
             _programs = null;
         }
 
+        /** Registers a vertex- and fragment-program under a certain name. */
         public function registerProgram(name:String, vertexProgram:ByteArray, fragmentProgram:ByteArray):void
         {
             var program:Program3D = Feeling.instance.context3d.createProgram();
@@ -27,6 +28,7 @@ package feeling.core
             _programs[name] = program;
         }
 
+        /** Deletes the vertex- and fragment-programs of a certain name. */
         public function unregisterProgram(name:String):void
         {
             var program:Program3D = getProgram(name);
@@ -37,6 +39,7 @@ package feeling.core
             }
         }
 
+        /** Returns the vertex- and fragment-programs registered under a certain name. */
         public function getProgram(name:String):Program3D
         {
             return _programs[name] as Program3D;

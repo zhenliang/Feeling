@@ -10,7 +10,7 @@ package feeling.events
     public class TouchMarker extends Sprite
     {
         [Embed(source = "media/textures/touch_marker.png")]
-        private const TouchMarkerBmp:Class;
+        private static const TouchMarkerBmp:Class;
 
         private var _center:Point;
         private var _texture:Texture;

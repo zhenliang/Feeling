@@ -25,6 +25,68 @@ package feeling.core
     import flash.ui.Multitouch;
     import flash.utils.getTimer;
 
+
+    /** The Starling class represents the core of the Starling framework.
+     *
+     *  <p>The Starling framework makes it possible to create 2D applications and games that make
+     *  use of the Stage3D architecture introduced in Flash Player 11. It implements a display tree
+     *  system that is very similar to that of conventional Flash, while leveraging modern GPUs
+     *  to speed up rendering.</p>
+     *
+     *  <p>The Starling class represents the link between the conventional Flash display tree and
+     *  the Starling display tree. To create a Starling-powered application, you have to create
+     *  an instance of the Starling class:</p>
+     *
+     *  <pre>var starling:Starling = new Starling(Game, stage);</pre>
+     *
+     *  <p>The first parameter has to be a Starling display object class, e.g. a subclass of
+     *  <code>starling.display.Sprite</code>. In the sample above, the class "Game" is the
+     *  application root. An instance of "Game" will be created as soon as Starling is initialized.
+     *  The second parameter is the conventional (Flash) stage object. Per default, Starling will
+     *  display its contents directly below the stage.</p>
+     *
+     *  <p>It is recommended to store the starling instance as a member variable, to make sure
+     *  that the Garbage Collector does not destroy it. After creating the Starling object, you
+     *  have to start it up like this:</p>
+     *
+     *  <pre>starling.start();</pre>
+     *
+     *  <p>It will now render the contents of the "Game" class in the frame rate that is set up for
+     *  the application (as defined in the Flash stage).</p>
+     *
+     *  <strong>Accessing the Starling object</strong>
+     *
+     *  <p>From within your application, you can access the current Starling object anytime
+     *  through the static method <code>Starling.current</code>. It will return the active Starling
+     *  instance (most applications will only have one Starling object, anyway).</p>
+     *
+     *  <strong>Viewport</strong>
+     *
+     *  <p>The area the Starling content is rendered into is, per default, the complete size of the
+     *  stage. You can, however, use the "viewPort" property to change it. This can be  useful
+     *  when you want to render only into a part of the screen, or if the player size changes. For
+     *  the latter, you can listen to the RESIZE-event dispatched by the Starling
+     *  stage.</p>
+     *
+     *  <strong>Native overlay</strong>
+     *
+     *  <p>Sometimes you will want to display native Flash content on top of Starling. That's what the
+     *  <code>nativeOverlay</code> property is for. It returns a Flash Sprite lying directly
+     *  on top of the Starling content. You can add conventional Flash objects to that overlay.</p>
+     *
+     *  <p>Beware, though, that conventional Flash content on top of 3D content can lead to
+     *  performance penalties on some (mobile) platforms. For that reason, always remove all child
+     *  objects from the overlay when you don't need them any longer. Starling will remove the
+     *  overlay from the display list when it's empty.</p>
+     *
+     *  <strong>Multitouch</strong>
+     *
+     *  <p>Starling supports multitouch input on devices that provide it. During development,
+     *  where most of us are working with a conventional mouse and keyboard, Starling can simulate
+     *  multitouch events with the help of the "Shift" and "Ctrl" (Mac: "Cmd") keys. Activate
+     *  this feature by enabling the <code>simulateMultitouch</code> property.</p>
+     *
+     */
     public class Feeling
     {
         // static members
@@ -38,6 +100,7 @@ package feeling.core
             _sInstance = new Feeling(gameClass, flashStage);
         }
 
+        /** The currently active Starling instance. */
         public static function get instance():Feeling
         {
             return _sInstance;
@@ -68,6 +131,16 @@ package feeling.core
 
         private var _debugInfo:DebugInfo;
 
+        /** Creates a new Starling instance.
+         *  @param rootClass  A subclass of a Starling display object. Its contents will represent
+         *                    the root of the display tree.
+         *  @param stage      The Flash (2D) stage.
+         *  @param viewPort   A rectangle describing the area into which the content will be
+         *                    rendered. @default stage size
+         *  @param stage3D    The Stage3D object into which the content will be rendered.
+         *                    @default the first available Stage3D.
+         *  @param renderMode Use this parameter to force software rendering.
+         */
         public function Feeling(gameClass:Class, nativeStage:flash.display.Stage, viewPoint:Rectangle = null, stage3D:Stage3D =
             null, renderMode:String = "auto"):void
         {
@@ -99,7 +172,7 @@ package feeling.core
                 trace("[Feeling] Context3D error: ", e.message);
             }
 
-            _antiAliasing = 0;
+            _antiAliasing = 16;
 
             _lastFrameTimestamp = getTimer() / 1000.0;
 
@@ -137,16 +210,22 @@ package feeling.core
 
         // functions
 
+        /** The render context of this instance. */
         public function get context3d():Context3D  { return _context3d; }
         public function get feelingStage():Stage  { return _feelingStage; }
         public function get renderSupport():RenderSupport  { return _renderSupport; }
         public function get shaderManager():ShaderManager  { return _shaderManager; }
+        /** The default juggler of this instance. Will be advanced once per frame. */
         public function get juggler():Juggler  { return _juggler; }
         public function get keyboardInput():KeyboardInput  { return _keyboardInput; }
 
+        /** Starts rendering and dispatching of <code>ENTER_FRAME</code> events. */
         public function start():void  { _started = true; }
+
+        /** Stops rendering. */
         public function stop():void  { _started = false; }
 
+        /** The antialiasing level. 0 - no antialasing, 16 - maximum antialiasing. @default 0 */
         public function get antiAliasing():int  { return _antiAliasing; }
         public function set antiAliasing(value:int):void
         {
@@ -154,6 +233,7 @@ package feeling.core
             updateViewPoint();
         }
 
+        /** The viewport into which Starling contents will be rendered. */
         public function get viewPoint():Rectangle  { return _viewPoint.clone(); }
         public function set viewPoint(value:Rectangle):void
         {
@@ -161,6 +241,8 @@ package feeling.core
             updateViewPoint();
         }
 
+        /** A Flash Sprite placed directly on top of the Starling content. Use it to display native
+         *  Flash components. */
         public function get nativeOverlay():Sprite
         {
             if (_nativeOverlay == null)

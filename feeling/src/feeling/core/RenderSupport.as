@@ -10,6 +10,12 @@ package feeling.core
     import flash.geom.Matrix3D;
     import flash.geom.Vector3D;
 
+    /** A class that contains helper methods simplifying Stage3D rendering.
+     *
+     *  A RenderSupport instance is passed to any "render" method of display objects.
+     *  It allows manipulation of the current transformation matrix (similar to the matrix
+     *  manipulation methods of OpenGL 1.x) and other helper methods.
+     */
     public class RenderSupport
     {
         public static function transformMatrixForObject(matrix:Matrix3D, object:DisplayObject):void
@@ -39,6 +45,7 @@ package feeling.core
 
         // construction
 
+        /** Creates a new RenderSupport object with an empty matrix stack. */
         public function RenderSupport(width:Number, height:Number)
         {
             _camera = new Camera();
@@ -71,6 +78,7 @@ package feeling.core
 
         // matrix manipulation
 
+        /** Sets up the projection matrix for rendering. */
         public function setupPerspectiveMatrix(width:Number, height:Number, near:Number = 0.001, far:Number = 1000.0):void
         {
             if (_ortho)
@@ -79,45 +87,49 @@ package feeling.core
                 _projectionMatrix.perspectiveFieldOfViewRH(45.0, width / height, near, far);
         }
 
+        /** Changes the modelview matrix to the identity matrix. */
         public function identityMatrix():void
         {
             _modelMatrix.identity();
         }
 
-        // 平移
+        /** Prepends a translation to the modelview matrix. */
         public function translateMatrix(dx:Number, dy:Number, dz:Number):void
         {
             _modelMatrix.prependTranslation(dx, dy, dz);
         }
 
-        // 旋转
+        /** Prepends a rotation (angle in radians) to the modelview matrix. */
         public function rotateMatrix(angle:Number, axis:Vector3D):void
         {
             _modelMatrix.prependRotation(angle, axis);
         }
 
-        // 缩放
+        /** Prepends an incremental scale change to the modelview matrix. */
         public function scaleMatrix(sx:Number, sy:Number, sz:Number):void
         {
             _modelMatrix.prependScale(sx, sy, sz);
         }
 
-        // 转换
+        /** Prepends translation, scale and rotation of an object to the modelview matrix. */
         public function transformMatrix(object:DisplayObject):void
         {
             transformMatrixForObject(_modelMatrix, object);
         }
 
+        /** Pushes the current modelview matrix to a stack from which it can be restored later. */
         public function pushMatrix():void
         {
             _matrixStack.push(_modelMatrix.clone());
         }
 
+        /** Restores the modelview matrix that was last pushed to the stack. */
         public function popMatrix():void
         {
             _modelMatrix = _matrixStack.pop();
         }
 
+        /** Empties the matrix stack, resets the modelview matrox to the identity matrix. */
         public function resetMatrix():void
         {
             if (_matrixStack.length)
@@ -126,6 +138,7 @@ package feeling.core
             identityMatrix();
         }
 
+        /** Calculates the product of modelview and projection matrix. */
         public function get mvpMatrix():Matrix3D
         {
             var mvpMatrix:Matrix3D = new Matrix3D();
@@ -137,6 +150,7 @@ package feeling.core
 
         // other helper methods
 
+        /** Sets up the default blending factors, depending on the premultiplied alpha status. */
         public function setupDefaultBlendFactors(premultipliedAlpha:Boolean):void
         {
             var destFactor:String = Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA;
@@ -144,6 +158,7 @@ package feeling.core
             Feeling.instance.context3d.setBlendFactors(sourceFactor, destFactor);
         }
 
+        /** Clears the render context with a certain color and alpha value. */
         public function clear(argb:uint = 0x0, alpha:Number = 1.0):void
         {
             Feeling.instance.context3d.clear(Color.getRed(argb) / 255, Color.getGreen(argb) / 255, Color.getBlue(argb) /
