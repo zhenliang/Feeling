@@ -8,8 +8,12 @@ package feeling.shaders
 
     public class QuadShader
     {
+        /** The name of the shader program used when a quad is rendered. The program is registered
+         *  under this name at the Starling object. */
         public static const PROGRAM_NAME:String = "QuadProgram";
 
+        /** Registers the vertex and fragment program required in the 'render' method at a
+         *  Starling object. You don't have to call this method manually. */
         public static function registerPrograms():void
         {
             var vertexProgramAssembler:AGALMiniAssembler = new AGALMiniAssembler();

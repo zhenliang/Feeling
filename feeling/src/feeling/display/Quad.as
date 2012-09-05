@@ -18,12 +18,34 @@ package feeling.display
     import flash.geom.Rectangle;
     import flash.geom.Vector3D;
 
+    /** A Quad represents a rectangle with a uniform color or a color gradient.
+     *
+     *  <p>You can set one color per vertex. The colors will smoothly fade into each other over the area
+     *  of the quad. To display a simple linear color gradient, assign one color to vertices 0 and 1 and
+     *  another color to vertices 2 and 3. </p>
+     *
+     *  <p>The indices of the vertices are arranged like this:</p>
+     *
+     *  <pre>
+     *  0 - 1
+     *  | / |
+     *  2 - 3
+     *  </pre>
+     *
+     *  @see Image
+     */
     public class Quad extends DisplayObject
     {
+        /** The raw vertex data of the quad. */
         protected var _vertexData:VertexData;
+
+        /** The vertex buffer object containing the vertex data of the quad. */
         protected var _vertexBuffer:VertexBuffer3D;
+
+        /** The index buffer object used to render the quad. */
         protected var _indexBuffer:IndexBuffer3D;
 
+        /** Creates a quad with a certain size and color. */
         public function Quad(width:Number, height:Number, color:uint = 0xffffff)
         {
             _vertexData = new VertexData(4, true);
@@ -48,6 +70,7 @@ package feeling.display
             _vertexData.setUniformColor(color);
         }
 
+        /** Disposes vertex- and index-buffer of the quad. */
         public override function dispose():void
         {
             if (_vertexBuffer)
@@ -58,8 +81,10 @@ package feeling.display
             super.dispose();
         }
 
+        /** Returns the color of the quad, or of vertex 0 if vertices have different colors. */
         public function get color():uint  { return _vertexData.getColor(0); }
 
+        /** Sets the colors of all vertices to a certain value. */
         public function set color(value:uint):void
         {
             _vertexData.setUniformColor(value);
@@ -67,11 +92,13 @@ package feeling.display
                 createVertexBuffer();
         }
 
+        /** Returns the color of a vertex at a certain index. */
         public function getVertexColor(vertexId:int):uint
         {
             return _vertexData.getColor(vertexId);
         }
 
+        /** Sets the color of a vertex at a certain index. */
         public function setVertexColor(vertexId:int, color:int):void
         {
             _vertexData.setColor(vertexId, color);
@@ -79,11 +106,13 @@ package feeling.display
                 createVertexBuffer();
         }
 
+        /** Returns the alpha value of a vertex at a certain index. */
         public function getVertexAlpha(vertexId:int):Number
         {
             return _vertexData.getAlpha(vertexId);
         }
 
+        /** Sets the alpha value of a vertex at a certain index. */
         public function setVertexAlpha(vertexId:int, alpha:Number):void
         {
             _vertexData.setAlpha(vertexId, alpha);
@@ -91,6 +120,7 @@ package feeling.display
                 createVertexBuffer();
         }
 
+        /** Returns a clone of the raw vertex data. */
         public function get vertexData():VertexData  { return _vertexData.clone(); }
 
         public override function getBounds(targetSpace:DisplayObject):Rectangle
@@ -128,6 +158,7 @@ package feeling.display
             return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
 
+        /** @inheritDoc */
         public override function render(alpha:Number):void
         {
             var context:Context3D = Feeling.instance.context3d;
@@ -156,6 +187,7 @@ package feeling.display
             context.setVertexBufferAt(1, null);
         }
 
+        /** Creates the vertex buffer from the raw vertex data at the current render context. */
         protected function createVertexBuffer():void
         {
             if (!_vertexBuffer)
@@ -163,6 +195,7 @@ package feeling.display
             _vertexBuffer.uploadFromVector(vertexData.data, 0, 4);
         }
 
+        /** Creates the index buffer at the current render context. */
         protected function createIndexBuffer():void
         {
             if (!_indexBuffer)

@@ -10,6 +10,8 @@ package feeling.shaders
     {
         public static const PROGRAM_NAME:String = "ImageProgram";
 
+        /** Registers the vertex and fragment programs required in the 'render' method at a
+         *  Starling object. You don't have to call this method manually. */
         public static function registerPrograms():void
         {
             // create vertex and fragment programs - from assembly

@@ -4,6 +4,26 @@ package feeling.display
     import feeling.events.Event;
     import feeling.textures.Texture;
 
+    /** A MovieClip is a simple way to display an animation depicted by a list of textures.
+    *
+    *  <p>Pass the frames of the movie in a vector of textures to the constructor. The movie clip
+    *  will have the width and height of the first frame. If you group your frames with the help
+    *  of a texture atlas (which is recommended), use the <code>getTextures</code>-method of the
+    *  atlas to receive the textures in the correct (alphabetic) order.</p>
+    *
+    *  <p>You can specify the desired framerate via the constructor. You can, however, manually
+    *  give each frame a custom duration. You can also play a sound whenever a certain frame
+    *  appears.</p>
+    *
+    *  <p>The methods <code>play</code> and <code>pause</code> control playback of the movie. You
+    *  will receive an event of type <code>Event.MovieCompleted</code> when the movie finished
+    *  playback. If the movie is looping, the event is dispatched once per loop.</p>
+    *
+    *  <p>As any animated object, a movie clip has to be added to a juggler (or have its
+    *  <code>advanceTime</code> method called regularly) to run.</p>
+    *
+    *  @see starling.textures.TextureAtlas
+    */
     public class MovieClip extends Image implements IAnimatable
     {
         private var _textures:Vector.<Texture>;
@@ -16,6 +36,8 @@ package feeling.display
         private var _loop:Boolean;
         private var _playing:Boolean;
 
+        /** Creates a moviclip from the provided textures and with the specified default framerate.
+         *  The movie will have the size of the first frame. */
         public function MovieClip(textures:Array, fps:Number = 12)
         {
             if (textures && textures.length)
@@ -40,11 +62,14 @@ package feeling.display
 
         // frame manipulation
 
+        /** Adds an additional frame, optionally with a sound and a custom duration. If the
+         *  duration is omitted, the default framerate is used (as specified in the constructor). */
         public function addFrame(texture:Texture, duration:Number = -1):void
         {
             addFrameAt(numFrames, texture, duration);
         }
 
+        /** Adds a frame at a certain index, optionally with a sound and a custom duration. */
         public function addFrameAt(frameId:int, texture:Texture, duration:Number = -1):void
         {
             if ((frameId < 0) || (frameId > numFrames))
@@ -59,6 +84,7 @@ package feeling.display
             _totalTime += duration;
         }
 
+        /** Removes the frame at a certain ID. The successors will move down. */
         public function removeFrameAt(frameId:int):void
         {
             if ((frameId < 0) || (frameId >= numFrames))
@@ -68,6 +94,7 @@ package feeling.display
             _durations.splice(frameId, 1);
         }
 
+        /** Returns the texture of a certain frame. */
         public function getFrameTexture(frameId:int):Texture
         {
             if ((frameId < 0) || (frameId >= numFrames))
@@ -75,6 +102,7 @@ package feeling.display
             return _textures[frameId];
         }
 
+        /** Sets the texture of a certain frame. */
         public function setFrameTexture(frameId:int, texture:Texture):void
         {
             if ((frameId < 0) || (frameId >= numFrames))
@@ -82,6 +110,7 @@ package feeling.display
             _textures[frameId] = texture;
         }
 
+        /** Returns the duration of a certain frame (in seconds). */
         public function getFrameDuration(frameId:int):Number
         {
             if ((frameId < 0) || (frameId >= numFrames))
@@ -89,6 +118,7 @@ package feeling.display
             return _durations[frameId];
         }
 
+        /** Sets the duration of a certain frame (in seconds). */
         public function setFrameDuration(frameId:int, duration:Number):void
         {
             if ((frameId < 0) || (frameId >= numFrames))
@@ -107,16 +137,19 @@ package feeling.display
 
         // playback methods
 
+        /** Starts playback. Beware that the clip has to be added to a juggler, too! */
         public function play():void
         {
             _playing = true;
         }
 
+        /** Pauses playback. */
         public function pause():void
         {
             _playing = false;
         }
 
+        /** Stops playback, resetting "currentFrame" to zero. */
         public function stop():void
         {
             _playing = false;
@@ -125,6 +158,7 @@ package feeling.display
 
         // IAnimatable
 
+        /** @inheritDoc */
         public function advanceTime(passedTime:Number):void
         {
             if (_loop && (_currentTime == _totalTime))
@@ -166,6 +200,7 @@ package feeling.display
             advanceTime(carryOverTime);
         }
 
+        /** Always returns <code>false</code>. */
         public function get isComplete():Boolean
         {
             // 返回真会被 Juggler 删除，所以这里的意义并不是播放完毕，而是完成使命
@@ -174,12 +209,17 @@ package feeling.display
 
         // properties
 
+        /** The total duration of the clip in seconds. */
         public function get totalTime():Number  { return _totalTime; }
+
+        /** The total number of frames. */
         public function get numFrames():int  { return _textures.length; }
 
+        /** Indicates if the clip should loop. */
         public function get loop():Boolean  { return _loop; }
         public function set loop(value:Boolean):void  { _loop = value; }
 
+        /** The index of the frame that is currently displayed. */
         public function get currentFrame():int  { return _currentFrame; }
         public function set currentFrame(value:int):void
         {
@@ -192,6 +232,9 @@ package feeling.display
             updateCurrentFrame();
         }
 
+        /** The default number of frames per second. Individual frames can have different
+         *  durations. If you change the fps, the durations of all frames will be scaled
+         *  relatively to the previous value. */
         public function get fps():Number  { return 1.0 / _defaultFrameDuration; }
         public function set fps(value:Number):void
         {
@@ -204,6 +247,8 @@ package feeling.display
                 setFrameDuration(1, getFrameDuration(i) * acceleration);
         }
 
+        /** Indicates if the clip is still playing. Returns <code>false</code> when the end
+         *  is reached. */
         public function get isPlaying():Boolean
         {
             if (_playing)
