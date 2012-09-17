@@ -11,11 +11,13 @@ package feeling.textures
 
     public class TextureCreator
     {
+        /** Creates a texture object from a bitmap.*/
         public static function createFromBitmap(bitmap:Bitmap, optimizeForRenderTexture:Boolean = false):Texture
         {
             return createFromBitmapData(bitmap.bitmapData, optimizeForRenderTexture);
         }
 
+        /** Creates a texture from bitmap data. */
         public static function createFromBitmapData(data:BitmapData, optimizeForRenderTexture:Boolean = false):Texture
         {
             var origWidth:int = data.width;
@@ -45,6 +47,8 @@ package feeling.textures
             return createFromTexture(concreteTexture, new Rectangle(0, 0, origWidth, origHeight));
         }
 
+        /** Creates a texture that contains a region (in pixels) of another texture. The new
+         *  texture will reference the base texture; no data is duplicated. */
         public static function createFromTexture(texture:Texture, region:Rectangle):Texture
         {
             if ((region.x == 0) && (region.y == 0) && (region.width == texture.width) && (region.height == texture.height))

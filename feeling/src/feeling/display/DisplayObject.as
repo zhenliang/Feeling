@@ -10,10 +10,10 @@ package feeling.display
     import flash.utils.getQualifiedClassName;
 
     /**
-     *  <p>The DisplayObject class is the base class for all objects that are rendered on the
-     *  screen.</p>
+     *  The DisplayObject class is the base class for all objects that are rendered on the
+     *  screen.
      *
-     *  <strong>The Display Tree</strong>
+     *  <p><strong>The Display Tree</strong></p>
      *
      *  <p>In Starling, all displayable objects are organized in a display tree. Only objects that
      *  are part of the display tree will be displayed (rendered).</p>
