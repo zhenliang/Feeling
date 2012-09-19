@@ -93,7 +93,7 @@ package feeling.display
                 child.removeFromParent();
                 _children.splice(index, 0, child);
                 child.setParent(this);
-                child.dispatchEvent(new Event(Event.ADDED));
+                child.dispatchEvent(new Event(Event.ADDED, true));
                 if (stage)
                     child.dispatchEventOnChildren(new Event(Event.ADDED_TO_STAGE));
             }
@@ -117,7 +117,7 @@ package feeling.display
             if ((index >= 0) && (index < numChildren))
             {
                 var child:DisplayObject = _children[index];
-                child.dispatchEvent(new Event(Event.REMOVED));
+                child.dispatchEvent(new Event(Event.REMOVED, true));
                 if (stage)
                     child.dispatchEventOnChildren(new Event(Event.REMOVED_FROM_STAGE));
                 child.setParent(null);

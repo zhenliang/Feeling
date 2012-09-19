@@ -384,7 +384,7 @@ package feeling.display
          *  @param alpha The accumulated alpha value from the object's parent up to the stage. */
         public function render(alpha:Number):void
         {
-            // override in subclass
+            throw "override in subclass";
         }
 
         /** @inheritDoc */

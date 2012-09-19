@@ -7,7 +7,7 @@ package feeling.events
 
     import flash.geom.Point;
 
-	/** The TouchMarker is used internally to mark touches created through "simulateMultitouch". */
+    /** The TouchMarker is used internally to mark touches created through "simulateMultitouch". */
     public class TouchMarker extends Sprite
     {
         [Embed(source = "media/textures/touch_marker.png")]
@@ -26,7 +26,7 @@ package feeling.events
                 var marker:Image = new Image(_texture);
                 marker.z = -1.0;
                 marker.pivotX = _texture.width / 2;
-                marker.pivotY = _texture.height / 2;
+                marker.pivotY = -_texture.height / 2;
                 marker.touchable = false;
                 addChild(marker);
             }

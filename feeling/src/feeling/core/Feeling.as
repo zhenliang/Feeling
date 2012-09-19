@@ -241,6 +241,12 @@ package feeling.core
             updateViewPoint();
         }
 
+        /** The Flash (2D) stage Feeling renders beneath. */
+        public function get nativeStage():flash.display.Stage
+        {
+            return _nativeStage;
+        }
+
         /** A Flash Sprite placed directly on top of the Starling content. Use it to display native
          *  Flash components. */
         public function get nativeOverlay():Sprite

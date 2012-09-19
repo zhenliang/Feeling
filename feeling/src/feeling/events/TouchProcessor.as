@@ -164,21 +164,30 @@ package feeling.events
         {
             if (e.keyCode == KeyCode.CTRL)
             {
+                var wasCtrlDown:Boolean = _ctrlDown;
                 _ctrlDown = (e.type == KeyboardEvent.KEY_DOWN);
 
-                if (simulateMultitouch)
+                if (simulateMultitouch && (wasCtrlDown != _ctrlDown))
                 {
                     _touchMarker.visible = _ctrlDown;
-
                     // 原来的代码
                     // _touchMarker.moveCenter(_stage.stageWidth / 2, _stage.stageHeight / 2);
                     // 我们的中心就是 (0, 0)
                     _touchMarker.moveCenter(0.0, 0.0);
 
-                    // if currently active, end mocked touch
+                    var mouseTouch:Touch = getCurrentTouch(0);
                     var mockedTouch:Touch = getCurrentTouch(1);
-                    if (mockedTouch && (mockedTouch.phase != TouchPhase.ENDED))
-                        enqueue(1, TouchPhase.ENDED, mockedTouch.globalX, mockedTouch.globalY);
+
+                    if (mouseTouch)
+                        _touchMarker.moveMarker(mouseTouch.globalX, mouseTouch.globalY);
+
+                    // end active touch or start new one
+                    if (wasCtrlDown && mockedTouch && (mockedTouch.phase != TouchPhase.ENDED))
+                        _queue.unshift([1, TouchPhase.ENDED, mockedTouch.globalX, mockedTouch.globalY]);
+                    else if (_ctrlDown && mouseTouch && (mouseTouch.phase != TouchPhase.ENDED || mouseTouch.phase != TouchPhase.
+                        HOVER))
+                        _queue.unshift([1, TouchPhase.BEGAN, _touchMarker.mockX, _touchMarker.mockY]);
+
                 }
                 else if (e.keyCode == KeyCode.SHIFT)
                 {
