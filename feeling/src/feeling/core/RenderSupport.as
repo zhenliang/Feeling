@@ -39,6 +39,8 @@ package feeling.core
         private var _viewMatrix:Matrix3D;
         private var _projectionMatrix:PerspectiveMatrix3D;
 
+        private var _mvpMatrix:Matrix3D;
+
         private var _matrixStack:Vector.<Matrix3D>;
         private var _matrixStackSize:int;
 
@@ -54,6 +56,8 @@ package feeling.core
             _modelMatrix = new Matrix3D();
             _viewMatrix = new Matrix3D();
             _projectionMatrix = new PerspectiveMatrix3D();
+
+            _mvpMatrix = new Matrix3D();
 
             _matrixStack = new <Matrix3D>[];
             _matrixStackSize = 0;
@@ -134,21 +138,22 @@ package feeling.core
             _modelMatrix.copyFrom(_matrixStack[--_matrixStackSize]);
         }
 
-        /** Empties the matrix stack, resets the modelview matrox to the identity matrix. */
+        /** Empties the matrix stack, resets the modelview matrix to the identity matrix. */
         public function resetMatrix():void
         {
             _matrixStackSize = 0;
             identityMatrix();
         }
 
-        /** Calculates the product of modelview and projection matrix. */
+        /** Calculates the product of modelview and projection matrix.
+         *  CAUTION: Don't save a reference to this object! Each call returns the same instance. */
         public function get mvpMatrix():Matrix3D
         {
-            var mvpMatrix:Matrix3D = new Matrix3D();
-            mvpMatrix.append(_modelMatrix);
-            mvpMatrix.append(_camera.viewMatrix);
-            mvpMatrix.append(_projectionMatrix);
-            return mvpMatrix;
+            _mvpMatrix.identity();
+            _mvpMatrix.append(_modelMatrix);
+            _mvpMatrix.append(_camera.viewMatrix);
+            _mvpMatrix.append(_projectionMatrix);
+            return _mvpMatrix;
         }
 
         // other helper methods
