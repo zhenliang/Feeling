@@ -114,8 +114,10 @@ package feeling.display
                 createIndexBuffer();
 
             alpha *= this.alpha;
-
             var pma:Boolean = _texture.premultipliedAlpha;
+            sRenderAlpha[0] = sRenderAlpha[1] = sRenderAlpha[2] = pma ? alpha : 1.0;
+            sRenderAlpha[3] = alpha;
+
             var alphaVec:Vector.<Number> = pma ? new <Number>[alpha, alpha, alpha, alpha] : new <Number>[1.0, 1.0, 1.0, alpha];
             renderSupport.setupDefaultBlendFactors(pma);
 
@@ -125,7 +127,7 @@ package feeling.display
             context.setVertexBufferAt(1, _vertexBuffer, VertexData.COLOR_OFFSET, Context3DVertexBufferFormat.FLOAT_4);
             context.setVertexBufferAt(2, _vertexBuffer, VertexData.TEXCOORD_OFFSET, Context3DVertexBufferFormat.FLOAT_2);
             context.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, renderSupport.mvpMatrix, true);
-            context.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, alphaVec, 1);
+            context.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, sRenderAlpha, 1);
             context.drawTriangles(_indexBuffer, 0, 2);
 
             context.setTextureAt(1, null);

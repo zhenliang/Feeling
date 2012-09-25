@@ -40,6 +40,7 @@ package feeling.core
         private var _projectionMatrix:PerspectiveMatrix3D;
 
         private var _matrixStack:Vector.<Matrix3D>;
+        private var _matrixStackSize:int;
 
         private var _ortho:Boolean;
 
@@ -54,7 +55,8 @@ package feeling.core
             _viewMatrix = new Matrix3D();
             _projectionMatrix = new PerspectiveMatrix3D();
 
-            _matrixStack = new Vector.<Matrix3D>();
+            _matrixStack = new <Matrix3D>[];
+            _matrixStackSize = 0;
 
             _ortho = false;
 
@@ -120,21 +122,22 @@ package feeling.core
         /** Pushes the current modelview matrix to a stack from which it can be restored later. */
         public function pushMatrix():void
         {
-            _matrixStack.push(_modelMatrix.clone());
+            if (_matrixStack.length < _matrixStackSize + 1)
+                _matrixStack.push(new Matrix3D());
+
+            _matrixStack[_matrixStackSize++].copyFrom(_modelMatrix);
         }
 
         /** Restores the modelview matrix that was last pushed to the stack. */
         public function popMatrix():void
         {
-            _modelMatrix = _matrixStack.pop();
+            _modelMatrix.copyFrom(_matrixStack[--_matrixStackSize]);
         }
 
         /** Empties the matrix stack, resets the modelview matrox to the identity matrix. */
         public function resetMatrix():void
         {
-            if (_matrixStack.length)
-                _matrixStack = new Vector.<Matrix3D>();
-
+            _matrixStackSize = 0;
             identityMatrix();
         }
 

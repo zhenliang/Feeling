@@ -34,15 +34,15 @@ package feeling.animation
      */
     public class Juggler
     {
-        private var _objects:Array;
+        private var _objects:Vector.<Object>;
         private var _elapsedTime:Number;
         private var _displayObject:DisplayObject;
 
         /** Create an empty juggler. */
         public function Juggler()
         {
-            _objects = [];
             _elapsedTime = 0.0;
+            _objects = new <Object>[];
         }
 
         /** Adds an object to the juggler. */
@@ -64,7 +64,7 @@ package feeling.animation
         /** Removes all objects at once. */
         public function purge():void
         {
-            _objects = [];
+            _objects = new <Object>[];
         }
 
         /** Advanced all objects by a certain time (in seconds). Objects with a positive
@@ -72,7 +72,7 @@ package feeling.animation
         public function advanceTime(time:Number):void
         {
             _elapsedTime += time;
-            var objectCopy:Array = _objects.concat();
+            var objectCopy:Vector.<Object> = _objects.concat();
 
             // since 'advanceTime' could modify the juggler (through a callback), we split
             // the logic in two loops.
